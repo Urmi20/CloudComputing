@@ -2,9 +2,9 @@ from typing import Any, Union
 
 from flask import render_template, url_for, request
 from app import webapp
-import hashlib
-import os
-import binascii
+from hashlib import pbkdf2_hmac
+from os import urandom
+from binascii import hexlify
 
 import datetime
 
@@ -20,9 +20,9 @@ def login_submit():
     username = request.form.get("username")
     password = request.form.get("password")
 
-    salt = os.urandom(16)
-    dk = hashlib.pbkdf2_hmac("sha512", password.encode(), salt, 100000)
-    hashpwd = binascii.hexlify(dk)
+    salt = urandom(16)
+    dk = pbkdf2_hmac("sha512", password.encode(), salt, 100000)
+    hashpwd = hexlify(dk)
     
     return render_template("welcome.html", username=username, password=password, salt=salt, hashpwd=hashpwd)
 
