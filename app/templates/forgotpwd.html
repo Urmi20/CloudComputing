@@ -1,4 +1,12 @@
 <!DOCTYPE html>
 <html>
-    <p>Lol, cannot believe you forgot your password :D !!!</p>
+    <form method="post" action="recovery_submit">
+        <fieldset>
+            <legend>Password recovery</legend>
+            Your email<br/>
+            <input type="text" name="email" mathod="post" value={{email if email != None}}><br/>
+            <input type="submit" value="Sign in">
+        </fieldset>
+    </form>
+
 </html>
