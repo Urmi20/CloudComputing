@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <h1>Hello my lovely ECE-1779 group!</h1>
+    <p>I hope we have a lot of fun with this project.</p>
+    <form method="post" action="login_submit">
+        <fieldset>
+            <legend>Login information</legend>
+            Username or email<br/>
+            <input type="text" name="username" mathod="post" value={{username if username != None}}><br/>
+            Password<br/>
+            <input type="password" name="password" method="post" value={{password if password != None}}><br/>
+            <a href="/forgotpwd">Forgot your password?</a>
+            <input type="submit" value="Sign in">
+        </fieldset>
+    </form>
+</html>
