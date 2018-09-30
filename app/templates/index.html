@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
-    <form method="post">
+    <form method="post" action="authenticate_user">
         <fieldset>
             <legend>Login information</legend>
             Username or email<br/>
-            <input type="text" name="username" mathod="post" value={{username if username != None}}><br/>
+            <input type="text" name="username" method="post" value={{username if username != None}}><br/>
             Password<br/>
             <input type="password" name="password" method="post" value={{password if password != None}}><br/>
             <a href="/forgotpwd">Forgot your password?</a>

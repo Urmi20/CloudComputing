@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html>
     <h1>Welcome {{username}}!</h1>
-    <p>For your security we are letting<br>
-        everyone know that your password is:</p><br/>
-    <h3>{{password}}<h3>
-    <p>Hash</p>
-    <h2>{{hashpwd}}</h2>
-    <p>Salt</p>
-    <p>{{salt}}</p>
+    <br/>
+
+    <form method="post" action="sign_out">
+        <input type="submit" value="Sign out">
+    </form>
 </html>
