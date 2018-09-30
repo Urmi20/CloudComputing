@@ -6,7 +6,10 @@
             Username or email<br/>
             <input type="text" name="username" method="post" value={{username if username != None}}><br/>
             Password<br/>
-            <input type="password" name="password" method="post" value={{password if password != None}}><br/>
+            <input type="password" name="password" method="post" value=""><br/>
+            {% if error == True %}
+                Wrong username or password<br/><br/>
+            {% endif %}
             <a href="/forgotpwd">Forgot your password?</a>
             <input type="submit" value="Sign in">
         </fieldset>

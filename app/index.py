@@ -6,8 +6,6 @@ from os import urandom
 
 webapp.secret_key = urandom(24)
 
-# TODO: Can we have our auxiliary classes in an individual folder?
-
 
 @webapp.route("/")
 def index():

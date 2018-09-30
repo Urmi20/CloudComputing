@@ -1,6 +1,6 @@
 from flask import render_template, request, session, redirect, url_for
 from flask import g as user_data
-from app.pwdManager import PwdManager
+from app.tools.pwdManager import PwdManager
 from app import webapp
 
 
@@ -18,7 +18,7 @@ def authenticate_user():
         session['authorized'] = True
         return redirect(url_for('welcome'))
 
-    return render_template("wrong_pwd.html")
+    return render_template("index.html", error=True, username=username)
 
 
 @webapp.route('/welcome')

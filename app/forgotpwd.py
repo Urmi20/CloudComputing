@@ -1,6 +1,6 @@
 from flask import render_template, request
 from app import webapp
-from app.email import Email
+from app.tools.email import Email
 
 
 # TODO: Have a class to hold all the constants
