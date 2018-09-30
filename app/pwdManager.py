@@ -5,7 +5,7 @@ from binascii import hexlify
 
 # TODO: define a __str__ method, a __repr__ method and a __init__ if needed
 class PwdObfuscation:
-    def getSaltedHash(self, password):
+    def getsaltedhash(self, password):
 
         # TODO: define constants
         salt = urandom(16)
