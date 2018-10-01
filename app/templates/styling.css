@@ -1,0 +1,43 @@
+.forms{
+    border-radius:20px;
+    -webkit-appearance:None;
+    margin:auto;
+	background-image:url('img3.jpg');
+}
+
+.textbox{
+    border: 1px solid #11557C;
+    border-radius:20px;
+    -webkit-appearance:None;
+}
+
+.fontstyle{
+	font-family:"Times New Roman",Times,Serif;
+	text-shadow:1px 2px #DCDCDC;
+	color:black;
+}
+
+.case{
+	text-transform:uppercase;
+	color:#008B8B;
+}
+
+.fontsize{
+	font-size:20px;
+}
+
+.button:hover{
+    background-color:#388E8E;
+    border: None;
+    color: white;
+    padding: 10px 30px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+	border-radius:12px;
+}
+
+.button2:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
