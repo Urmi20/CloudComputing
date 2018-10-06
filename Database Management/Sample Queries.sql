@@ -1,7 +1,7 @@
 USE `InstaKilo`
 
 insert into users 
-	( id, profile, name, first_name, last_name, email, pw_salt, pw_hash ) 
+	( id, profile, name, first_name, last_name, email, pw_salt_hash ) 
 values 
 	( DEFAULT,  
 	(select id from user_profiles where type = "user"),
@@ -9,11 +9,10 @@ values
 	"Felipe",
 	"Sander Pereira Clark",
 	"felipe.clark@mail.utoronto.ca",
-	"xdfrewqertioljio",
 	"grgrgregergdafnjtj" )
     
 insert into users 
-	( id, profile, name, first_name, last_name, email, pw_salt, pw_hash ) 
+	( id, profile, name, first_name, last_name, email, pw_salt_hash ) 
 values 
 	( DEFAULT,  
 	(select id from user_profiles where type = "admin"),
@@ -21,7 +20,6 @@ values
     "ADMINISTRATOR",
     "ALL POWERFUL",
     "admin@instakilo.com",
-    "asdlkjvfruhbcswk",
 	"kloevnjiwdvawghuo" )
 
 insert into photos 
