@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS `InstaKilo`.`transformations` (
   `original` INT UNSIGNED NOT NULL,
   `trans_type` INT UNSIGNED NOT NULL,
   `file_name` VARCHAR(128) NOT NULL,
-  PRIMARY KEY (`id`, `original`),
+  PRIMARY KEY (`id`, `original`, `trans_type`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   UNIQUE INDEX `file_name_UNIQUE` (`file_name` ASC),
   INDEX `type_idx` (`trans_type` ASC),
@@ -146,4 +146,3 @@ INSERT INTO `InstaKilo`.`transformation_type` (`id`, `description`) VALUES (DEFA
 INSERT INTO `InstaKilo`.`transformation_type` (`id`, `description`) VALUES (DEFAULT, 'Barrel Distortion');
 
 COMMIT;
-
