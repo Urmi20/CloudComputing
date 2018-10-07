@@ -14,11 +14,12 @@
             <legend class="text-center case" style="margin-top:40px;"><h1>Personal information</h1></legend>
 			
             <div class="text-center forms container">
-				<label class="fontsize">Username or email</label><br/>
-				<input type="text" name="username" value="{{username if username!=None}}" class="textbox"/><br/><br/>
+				<br/>
+				<input type="text" name="username" value="{{username if username!=None}}"
+					   placeholder="Username or email" class="textbox"/><br/><br/>
 
-				<label class="fontsize">Password</label><br/>
-				<input type="password" name="password" class="textbox"/><br/><br/>
+				<input type="password" name="password"
+					   placeholder="Password" class="textbox"/><br/><br/>
 
 				{% if error== True %}
 					Wrong Username or password<br/><br>
