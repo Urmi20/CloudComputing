@@ -41,12 +41,12 @@
                            required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
                            placeholder="email" class="textbox"/><br/><br/>
 
-                    <input type="password" name="password" value="{{password if password!=None}}"
+                    <input type="password" name="password" value=""
                            required pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$"
                            title="Minimum length: 8. Must include at least one uppercase and one lowercase character, one number and one special character"
                            placeholder="Password" class="textbox"/><br/><br/>
 
-                    <input type="password" name="password_conf" value="{{password_conf if password_conf!=None}}"
+                    <input type="password" name="password_conf" value=""
                            required placeholder="Confirm password"
                            title="Must match the password"class="textbox"/><br/><br/>
 

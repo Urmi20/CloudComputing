@@ -2,7 +2,7 @@
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
 -- Schema InstaKilo
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `InstaKilo`.`user_profiles` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `type` VARCHAR(6) NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC))
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
@@ -43,11 +43,11 @@ CREATE TABLE IF NOT EXISTS `InstaKilo`.`users` (
   `first_name` VARCHAR(45) NOT NULL,
   `last_name` VARCHAR(100) NOT NULL,
   `email` VARCHAR(45) NOT NULL,
-  `pw_salt_hash` VARCHAR(160) NOT NULL,
+  `pw_salt_hash` VARCHAR(165) NOT NULL,
   PRIMARY KEY (`id`, `profile`),
-  UNIQUE INDEX `user_name_UNIQUE` (`name` ASC),
-  UNIQUE INDEX `user_id_UNIQUE` (`id` ASC),
-  INDEX `profile_idx` (`profile` ASC),
+  UNIQUE INDEX `user_name_UNIQUE` (`name` ASC) VISIBLE,
+  UNIQUE INDEX `user_id_UNIQUE` (`id` ASC) VISIBLE,
+  INDEX `profile_idx` (`profile` ASC) VISIBLE,
   CONSTRAINT `profile`
     FOREIGN KEY (`profile`)
     REFERENCES `InstaKilo`.`user_profiles` (`id`)
@@ -68,9 +68,9 @@ CREATE TABLE IF NOT EXISTS `InstaKilo`.`photos` (
   `hashtags` VARCHAR(50) NULL,
   `file_name` VARCHAR(128) NOT NULL,
   PRIMARY KEY (`id`, `owner`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
-  UNIQUE INDEX `file_name_UNIQUE` (`file_name` ASC),
-  INDEX `owner_idx` (`owner` ASC),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
+  UNIQUE INDEX `file_name_UNIQUE` (`file_name` ASC) VISIBLE,
+  INDEX `owner_idx` (`owner` ASC) VISIBLE,
   CONSTRAINT `owner`
     FOREIGN KEY (`owner`)
     REFERENCES `InstaKilo`.`users` (`id`)
@@ -88,8 +88,8 @@ CREATE TABLE IF NOT EXISTS `InstaKilo`.`transformation_type` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `description` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
-  UNIQUE INDEX `description_UNIQUE` (`description` ASC))
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
+  UNIQUE INDEX `description_UNIQUE` (`description` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
@@ -104,10 +104,10 @@ CREATE TABLE IF NOT EXISTS `InstaKilo`.`transformations` (
   `trans_type` INT UNSIGNED NOT NULL,
   `file_name` VARCHAR(128) NOT NULL,
   PRIMARY KEY (`id`, `original`, `trans_type`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
-  UNIQUE INDEX `file_name_UNIQUE` (`file_name` ASC),
-  INDEX `type_idx` (`trans_type` ASC),
-  INDEX `original_photo_idx` (`original` ASC),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
+  UNIQUE INDEX `file_name_UNIQUE` (`file_name` ASC) VISIBLE,
+  INDEX `type_idx` (`trans_type` ASC) VISIBLE,
+  INDEX `original_photo_idx` (`original` ASC) VISIBLE,
   CONSTRAINT `original_photo`
     FOREIGN KEY (`original`)
     REFERENCES `InstaKilo`.`photos` (`id`)

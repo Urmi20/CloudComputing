@@ -1,8 +1,8 @@
 from flask import render_template, request, redirect, url_for, session
 from app import webapp
 from app.tools import validate
-import mysql.connector
-from mysql.connector import errorcode
+from app.tools.dbTools import DataBaseManager
+from app.tools.pwdManager import PwdManager
 
 
 @webapp.route('/newuser')
@@ -24,32 +24,28 @@ def create_user():
     err_msg = compose_error_message(username, first_name, last_name, email, password, password_conf)
 
     if err_msg is not None:
-        return render_template("newuser.html", error=err_msg, username=username, first_name=first_name, last_name=last_name,
-                               email=email, password=password, password_conf=password_conf)
+        return render_template("newuser.html", error=err_msg, username=username, first_name=first_name,
+                               last_name=last_name, email=email, password=password, password_conf=password_conf)
 
-    try:
-        cnx = mysql.connector.connect(user="root", password="password", host="127.0.0.1", database="InstaKilo")
+    pwd_manager = PwdManager()
+    salt, hashpwd = pwd_manager.get_salt_hash(password)
+    stored_pwd = "$" + salt + "$" + hashpwd.decode("utf-8")
 
-        query = ('insert into users (id, profile, name, first_name, last_name, email, pw_salt_hash) values (DEFAULT, (select id from user_profiles where type = "user"), %s, %s, %s, %s, %s)')
+    dbm = DataBaseManager()
+    db_success = dbm.add_user(username, first_name, last_name, email, stored_pwd)
 
-        cursor = cnx.cursor()
-        cursor.execute(query, (username, first_name, last_name, email, password))
+    if db_success:
+        session['user'] = username
+        session['authorized'] = True
 
-    except mysql.connector.Error as err:
-        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-            print("Something is wrong with your user name or password")
-        elif err.errno == errorcode.ER_BAD_DB_ERROR:
-            print("Database does not exist")
-        else:
-            print(err)
-
-    cnx.commit()
-    cursor.close()
-    cnx.close()
-    session['user'] = username
-    session['authorized'] = True
-
-    return redirect(url_for('welcome'))
+        return redirect(url_for('welcome'))
+    else:
+        # Getting here means that either there was a database  error or the username is already taken
+        # since the user will have to retry anyways, we might as well say there was an error with the
+        # chosen username
+        err_msg = ["Username is unavailable."]
+        return render_template("newuser.html", error=err_msg, username=username, first_name=first_name,
+                               last_name=last_name, email=email, password=password, password_conf=password_conf)
 
 
 def compose_error_message(username, first_name, last_name, email, password, password_conf):
@@ -74,7 +70,7 @@ def compose_error_message(username, first_name, last_name, email, password, pass
         err_msg.append("Password and verification do not match.")
 
     if len(err_msg) > 0:
-        err_msg.append("Please check the requirements for the fields listed above and try again.")
+        err_msg.append("Please hover your cursor over the fields below to check their requirements.")
     else:
         err_msg = None
 

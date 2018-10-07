@@ -8,10 +8,7 @@ def authenticate_user():
     username = request.form.get('username')
     password = request.form.get('password')
 
-    # TODO: The hashing shouldn't be here. Move to "create new account"
     pwd_manager = PwdManager()
-    salt, hashpwd = pwd_manager.get_salt_hash(password)#[1]
-
     if pwd_manager.check_password(username, password):
         session['user'] = username
         session['authorized'] = True

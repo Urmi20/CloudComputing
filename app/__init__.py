@@ -7,3 +7,4 @@ from app import forgotpwd
 from app import welcome
 from app import signOut
 from app import newuser
+from app.tools import dbTools
