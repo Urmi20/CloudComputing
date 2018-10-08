@@ -10,14 +10,18 @@
     </head>
 
     <body class='fontstyle'>
-		    <form method="post" action="sign_out" class="container">  <!-- add action path-->
+        <form method="post" action="sign_out" class="container">  <!-- add action path-->
             <legend class="text-center case" style="margin-top:40px;"><h1>Welcome {{username}}!</h1></legend>
-			
             <div class="text-center forms container">
-			<input type="submit" value="Sign out" class="button"/><br>
-			</div>
-			
+                <input type="submit" value="Sign out" class="button"/><br>
+            </div>
+        </form>
+        <br/><br/>
+        <form method="post" enctype="multipart/form-data" action="photo_upload" class="container">
+            <div class="text-center forms container">
+                <input type="file" name="file" value="Choose Image" class="button"/>
+                <input type="submit" name="upload"  value="Upload" class="button">
+            </div>
         </form>
     </body>
-	
 </html>
