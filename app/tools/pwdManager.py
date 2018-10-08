@@ -1,23 +1,29 @@
 from hashlib import pbkdf2_hmac
-from os import urandom
 from binascii import hexlify
+import uuid
+from app.tools.dbTools import DataBaseManager
 
 
 # TODO: define a __str__ method, a __repr__ method and a __init__ if needed
 class PwdManager:
-    def get_salt_hash(self, password, salt=None):
+    @staticmethod
+    def get_salt_hash(password, salt=None):
 
         # TODO: define constants
         if salt is None:
-            salt = urandom(16)
+            salt = uuid.uuid4().hex
 
-        dk = pbkdf2_hmac("sha512", password.encode(), salt, 100000)
+        dk = pbkdf2_hmac("sha512", password.encode(), salt.encode(), 100000)
         return salt, hexlify(dk)
 
-    # TODO: Actually get the salt and the coded password from the database
-    # TODO: Hash the password (arg) using the DB salt (call get_salt_hash())
-    def check_password(self, username, password):
-        if password == 'password':
+    @staticmethod
+    def check_password(username, password):
+        dbm = DataBaseManager()
+        db_salt, db_pw_hash = dbm.get_user_pwd_hash(username)
+
+        pw_hash = PwdManager.get_salt_hash(password, db_salt)[1]
+
+        if db_pw_hash == pw_hash.decode("utf-8"):
             return True
 
         return False
