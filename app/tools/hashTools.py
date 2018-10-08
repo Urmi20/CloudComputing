@@ -5,15 +5,15 @@ from app.tools.dbTools import DataBaseManager
 
 
 # TODO: define a __str__ method, a __repr__ method and a __init__ if needed
-class PwdManager:
+class Hash:
     @staticmethod
-    def get_salt_hash(password, salt=None):
+    def get_salt_hash(string, salt=None):
 
         # TODO: define constants
         if salt is None:
             salt = uuid.uuid4().hex
 
-        dk = pbkdf2_hmac("sha512", password.encode(), salt.encode(), 100000)
+        dk = pbkdf2_hmac("sha512", string.encode(), salt.encode(), 100000)
         return salt, hexlify(dk)
 
     @staticmethod
@@ -21,7 +21,7 @@ class PwdManager:
         dbm = DataBaseManager()
         db_salt, db_pw_hash = dbm.get_user_pwd_hash(username)
 
-        pw_hash = PwdManager.get_salt_hash(password, db_salt)[1]
+        pw_hash = Hash.get_salt_hash(password, db_salt)[1]
 
         if db_pw_hash == pw_hash.decode("utf-8"):
             return True

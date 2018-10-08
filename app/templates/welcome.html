@@ -20,6 +20,9 @@
         <form method="post" enctype="multipart/form-data" action="photo_upload" class="container">
             <div class="text-center forms container">
                 <input type="file" name="file" value="Choose Image" class="button"/>
+                {% if up_error!=None %}
+                    <span style="color:red;">{{ up_error }}</span>
+                {% endif %}
                 <input type="submit" name="upload"  value="Upload" class="button">
             </div>
         </form>

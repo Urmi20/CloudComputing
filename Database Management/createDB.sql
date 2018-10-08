@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `InstaKilo`.`photos` (
   `owner` INT UNSIGNED NOT NULL,
   `title` VARCHAR(50) NULL,
   `hashtags` VARCHAR(50) NULL,
-  `file_name` VARCHAR(128) NOT NULL,
+  `file_name` VARCHAR(165) NOT NULL,
   PRIMARY KEY (`id`, `owner`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
   UNIQUE INDEX `file_name_UNIQUE` (`file_name` ASC) VISIBLE,
@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS `InstaKilo`.`transformations` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `original` INT UNSIGNED NOT NULL,
   `trans_type` INT UNSIGNED NOT NULL,
-  `file_name` VARCHAR(128) NOT NULL,
+  `file_name` VARCHAR(165) NOT NULL,
   PRIMARY KEY (`id`, `original`, `trans_type`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
   UNIQUE INDEX `file_name_UNIQUE` (`file_name` ASC) VISIBLE,
@@ -146,3 +146,4 @@ INSERT INTO `InstaKilo`.`transformation_type` (`id`, `description`) VALUES (DEFA
 INSERT INTO `InstaKilo`.`transformation_type` (`id`, `description`) VALUES (DEFAULT, 'Barrel Distortion');
 
 COMMIT;
+

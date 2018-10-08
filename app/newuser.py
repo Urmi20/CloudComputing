@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for, session
 from app import webapp
 from app.tools import validate
 from app.tools.dbTools import DataBaseManager
-from app.tools.pwdManager import PwdManager
+from app.tools.hashTools import Hash
 
 
 @webapp.route('/newuser')
@@ -27,7 +27,7 @@ def create_user():
         return render_template("newuser.html", error=err_msg, username=username, first_name=first_name,
                                last_name=last_name, email=email, password=password, password_conf=password_conf)
 
-    pwd_manager = PwdManager()
+    pwd_manager = Hash()
     salt, hashpwd = pwd_manager.get_salt_hash(password)
     stored_pwd = "$" + salt + "$" + hashpwd.decode("utf-8")
 
