@@ -6,7 +6,8 @@ from app.tools.dbTools import DataBaseManager
 
 # TODO: define a __str__ method, a __repr__ method and a __init__ if needed
 class PwdManager:
-    def get_salt_hash(self, password, salt=None):
+    @staticmethod
+    def get_salt_hash(password, salt=None):
 
         # TODO: define constants
         if salt is None:
@@ -15,14 +16,14 @@ class PwdManager:
         dk = pbkdf2_hmac("sha512", password.encode(), salt.encode(), 100000)
         return salt, hexlify(dk)
 
-    def check_password(self, username, password):
+    @staticmethod
+    def check_password(username, password):
         dbm = DataBaseManager()
         db_salt, db_pw_hash = dbm.get_user_pwd_hash(username)
 
-        pw_hash = self.get_salt_hash(password, db_salt)[1]
+        pw_hash = PwdManager.get_salt_hash(password, db_salt)[1]
 
         if db_pw_hash == pw_hash.decode("utf-8"):
             return True
 
         return False
-
