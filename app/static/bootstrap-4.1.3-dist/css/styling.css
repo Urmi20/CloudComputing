@@ -1,8 +1,17 @@
 .forms{
+    margin-top: 50px;
     border-radius:20px;
     -webkit-appearance:None;
     margin:auto;
-    background-image:url('../../Logo.png');
+}
+
+.bkgrnd {
+    background:url("../../Background.png") no-repeat right center;
+    background-repeat: round;
+    background-attachment: fixed;
+    background-position-x:20%;
+    background-position-y:40px;
+    background-origin: padding-box;
 }
 
 .textbox{
@@ -18,7 +27,7 @@
 }
 
 .case{
-	text-transform:uppercase;
+	text-transform:capitalize;
 	color:#008B8B;
 }
 

@@ -6,7 +6,7 @@ from app import webapp
 class DataBaseManager:
     # TODO: we should not use ROOT. Create a "common" user. Can we have this data encrypted?
     user = "root"
-    password = "password"
+    password = "root@1234"
     host = "127.0.0.1"
     database = "InstaKilo"
 
