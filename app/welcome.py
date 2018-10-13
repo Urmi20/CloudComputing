@@ -20,7 +20,7 @@ def authenticate_user():
 
 @webapp.route('/welcome')
 def welcome():
-    if session['authorized'] is True:
+    if 'authorized' in session and session['authorized'] is True:
         return render_template('welcome.html', username=session['user'])
 
     return redirect(url_for('index'))
@@ -41,11 +41,13 @@ def extract_photo_from_request():
     return file
 
 
-@webapp.route('/photo_upload', methods=['POST'])
+@webapp.route('/photo_upload')
 def photo_upload():
-    file = extract_photo_from_request()
+    if 'authorized' in session and session['authorized'] is True:
+        file = extract_photo_from_request()
 
-    if not file or not FileManager.save_file(file):
-        return render_template("welcome.html", up_error="Please select a valid file.")
+        if not file or not FileManager.save_file(file):
+            return render_template("welcome.html", up_error="Please select a valid file.")
 
-    return redirect(url_for('uploaded_file', filename=file.filename))
+        return redirect(url_for('uploaded_file', filename=file.filename))
+    return redirect(url_for('index'))
