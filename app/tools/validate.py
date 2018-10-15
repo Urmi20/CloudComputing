@@ -15,3 +15,20 @@ class regex:
             return value
         else:
             return False
+
+    @staticmethod
+    def compose_error_message(password, password_conf):
+        err_msg = []
+
+        if not password:
+            err_msg.append("Invalid password.")
+
+        if not password_conf:
+            err_msg.append("Password and verification do not match.")
+
+        if len(err_msg) > 0:
+            err_msg.append("Please hover your cursor over the fields below to check their requirements.")
+        else:
+            err_msg = None
+
+        return err_msg

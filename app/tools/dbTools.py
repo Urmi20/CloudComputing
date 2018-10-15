@@ -5,7 +5,6 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from os import urandom
 from base64 import b64encode
 
-
 key = urandom(24)
 secret_key = b64encode(key).decode('utf-8')
 
@@ -65,6 +64,15 @@ class DataBaseManager:
         parameters = (email,)
         return self._run_query(query, parameters)[1]
 
+    def update_new_password(self, new_pwd, email):
+        query = ('update users '
+                 'set pw_salt_hash = %s '
+                 'where email = %s')
+        parameters = (new_pwd, email)
+        print(parameters)
+        return self._run_query(query, parameters)[0]
+
+
     @staticmethod
     def split_salt_hash(salt_hash):
         salt, pw_hash = salt_hash.rsplit("$", 1)
@@ -87,20 +95,18 @@ class DataBaseManager:
         return salt, pw_hash
 
     @staticmethod
-    def get_token(expires_sec=300):
-        id_new = urandom(5)
-        id_new_uft = b64encode(id_new).decode('utf-8')
+    def get_token(email, expires_sec=300):
         s = Serializer(secret_key, expires_sec)
-        return s.dumps({'user_id': id_new_uft}).decode('utf-8')
+        return s.dumps({'user_id': email}).decode('utf-8')
 
     @staticmethod
     def verify_token(token):
         s = Serializer(secret_key)
         try:
-            user_id = s.loads(token)['user_id']
+            user_email = s.loads(token)['user_id']
         except:
             return None
-        return user_id
+        return user_email
 
 
 @webapp.teardown_appcontext

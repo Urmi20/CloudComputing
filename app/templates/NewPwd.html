@@ -10,23 +10,25 @@
     </head>
 
     <body class="fontstyle  bkgrnd">
-        <form method="post" action="authenticate_user"> <!-- Redirected to index.py-->  <!-- add action path-->
+        <form method="post" action="{{ url_for('change_pwd', token=token) }}">
             <legend class="text-center" style="margin-top:40px;"><h1>InstaKilo</h1></legend>
 
-            {% if error== True %}
+            {% if session== True %}
 			<div class="text-center forms container">
                 <h3>Session Expired</h3><br/><br>
 
             {% else %}
 
             <div class="text-center forms container">
-				<input type="password" name="New_Password"
-					   placeholder="New Password" class="textbox"/><br/><br/>
+				<input type="password" name="password" value=""
+                           required pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$"
+                           title="Minimum length: 8. Must include at least one uppercase and one lowercase character, one number and one special character"
+                           placeholder="Password" class="textbox"/><br/><br/>
 
-				<input type="password" name="Confirm_Password"
-					   placeholder="Confirm Password" class="textbox"/><br/><br/>
-
-
+                    <input type="password" name="password_conf" value=""
+                           required placeholder="Confirm password"
+                           title="Must match the password"class="textbox"/><br/>
+                    {{ error }}<br/>
 
 				<input type="submit" class="button" value="Sign in"/><br/><br/>
 
