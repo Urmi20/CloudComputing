@@ -1,18 +1,13 @@
-<!DOCTYPE html>
+	{% extends "base.html" %}
+	{% block content %}
+		<ul>
+			<li><a href="{{url_for('create_user_landing')}}">New User</a></li>
+			<li><a href="{{url_for('index')}}">Sign In</a></li>
+		</ul>
 
-<html lang="en">
-
-    <head>
-		<meta charset="utf-8">
-        <title>Index</title>
-        <link rel="stylesheet" href="{{url_for('static',filename='bootstrap-4.1.3-dist/css/styling.css')}}">
-		<link rel="stylesheet" href="{{url_for('static',filename='bootstrap-4.1.3-dist/css/bootstrap.min.css')}}">
-    </head>
-
-    <body class="fontstyle  bkgrnd">
         <form method="post" action="authenticate_user"> <!-- Redirected to index.py-->  <!-- add action path-->
             <legend class="text-center" style="margin-top:40px;"><h1>InstaKilo</h1></legend>
-			
+
             <div class="text-center forms container">
 				<input type="text" name="username" value="{{username if username!=None}}"
 					   placeholder="Username or email" class="textbox"/><br/><br/>
@@ -32,7 +27,4 @@
 
 			</div>
         </form>
-
-    </body>
-	
-</html>
+	{% endblock %}

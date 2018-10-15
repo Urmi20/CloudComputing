@@ -1,7 +1,6 @@
 .forms{
     margin-top: 50px;
     border-radius:20px;
-    -webkit-appearance:None;
     margin:auto;
 }
 
@@ -22,7 +21,6 @@
 
 .fontstyle{
 	font-family:"Times New Roman",Times,Serif;
-	text-shadow:1px 2px #DCDCDC;
 	color:black;
 }
 
@@ -50,3 +48,28 @@
 .button2:hover {
     box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 }
+
+ul{
+    list-style-type:none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color:black;
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration:none;
+}
+
+li a:hover {
+    background-color:transparent;
+}
+
