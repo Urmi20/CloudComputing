@@ -1,4 +1,6 @@
 import smtplib
+from app.tools.dbTools import DataBaseManager
+from app.tools.validate import regex
 
 
 # TODO: define a __str__ method and a __repr__ method
@@ -16,7 +18,6 @@ class Email:
         self.server.starttls()
         self.server.login(account, password)
 
-
     def __del__(self):
         self.server.quit()
 
@@ -28,3 +29,4 @@ class Email:
         message = header + message
 
         self.server.sendmail(sender, to, message)
+

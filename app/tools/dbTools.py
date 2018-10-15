@@ -1,6 +1,13 @@
 from flask import g as resources
 import mysql.connector
 from app import webapp
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from os import urandom
+from base64 import b64encode
+
+
+key = urandom(24)
+secret_key = b64encode(key).decode('utf-8')
 
 
 class DataBaseManager:
@@ -34,7 +41,7 @@ class DataBaseManager:
                 # no returned results. We can ignore this error.
                 pass
 
-            self.db.commit()
+                self.db.commit()
 
         except mysql.connector.Error:
             self.db.rollback()
@@ -50,6 +57,13 @@ class DataBaseManager:
         parameters = (username, first_name, last_name, email, password)
 
         return self._run_query(query, parameters)[0]
+
+    def email_already_exists(self, email):
+        query = ('select name '
+                 'from users '
+                 'where email = %s')
+        parameters = (email,)
+        return self._run_query(query, parameters)[1]
 
     @staticmethod
     def split_salt_hash(salt_hash):
@@ -71,6 +85,22 @@ class DataBaseManager:
             salt, pw_hash = DataBaseManager.split_salt_hash(rows[0][0])
 
         return salt, pw_hash
+
+    @staticmethod
+    def get_token(expires_sec=300):
+        id_new = urandom(5)
+        id_new_uft = b64encode(id_new).decode('utf-8')
+        s = Serializer(secret_key, expires_sec)
+        return s.dumps({'user_id': id_new_uft}).decode('utf-8')
+
+    @staticmethod
+    def verify_token(token):
+        s = Serializer(secret_key)
+        try:
+            user_id = s.loads(token)['user_id']
+        except:
+            return None
+        return user_id
 
 
 @webapp.teardown_appcontext

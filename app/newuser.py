@@ -32,18 +32,25 @@ def create_user():
     stored_pwd = "$" + salt + "$" + hashpwd.decode("utf-8")
 
     dbm = DataBaseManager()
-    db_success = dbm.add_user(username, first_name, last_name, email, stored_pwd)
+    email_success = dbm.email_already_exists(email)
 
-    if db_success:
-        session['user'] = username
-        session['authorized'] = True
+    if not email_success:
+        db_success = dbm.add_user(username, first_name, last_name, email, stored_pwd)
 
-        return redirect(url_for('welcome'))
+        if db_success:
+            session['user'] = username
+            session['authorized'] = True
+
+            return redirect(url_for('welcome'))
+        else:
+            # Getting here means that either there was a database  error or the username is already taken
+            # since the user will have to retry anyways, we might as well say there was an error with the
+            # chosen username
+            err_msg = ["Username is unavailable."]
+            return render_template("newuser.html", error=err_msg, username=username, first_name=first_name,
+                                   last_name=last_name, email=email, password=password, password_conf=password_conf)
     else:
-        # Getting here means that either there was a database  error or the username is already taken
-        # since the user will have to retry anyways, we might as well say there was an error with the
-        # chosen username
-        err_msg = ["Username is unavailable."]
+        err_msg = ["An account already exists with this Email"]
         return render_template("newuser.html", error=err_msg, username=username, first_name=first_name,
                                last_name=last_name, email=email, password=password, password_conf=password_conf)
 
