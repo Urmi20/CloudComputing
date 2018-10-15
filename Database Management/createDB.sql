@@ -19,11 +19,11 @@ CREATE SCHEMA IF NOT EXISTS `InstaKilo` DEFAULT CHARACTER SET utf8 ;
 USE `InstaKilo` ;
 
 -- -----------------------------------------------------
--- Table `InstaKilo`.`user_profiles`
+-- Table `InstaKilo`.`user_profile`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `InstaKilo`.`user_profiles` ;
+DROP TABLE IF EXISTS `InstaKilo`.`user_profile` ;
 
-CREATE TABLE IF NOT EXISTS `InstaKilo`.`user_profiles` (
+CREATE TABLE IF NOT EXISTS `InstaKilo`.`user_profile` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `type` VARCHAR(6) NULL,
   PRIMARY KEY (`id`),
@@ -32,11 +32,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `InstaKilo`.`users`
+-- Table `InstaKilo`.`user`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `InstaKilo`.`users` ;
+DROP TABLE IF EXISTS `InstaKilo`.`user` ;
 
-CREATE TABLE IF NOT EXISTS `InstaKilo`.`users` (
+CREATE TABLE IF NOT EXISTS `InstaKilo`.`user` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `profile` INT UNSIGNED NOT NULL,
   `name` VARCHAR(45) NULL,
@@ -50,30 +50,32 @@ CREATE TABLE IF NOT EXISTS `InstaKilo`.`users` (
   INDEX `profile_idx` (`profile` ASC) VISIBLE,
   CONSTRAINT `profile`
     FOREIGN KEY (`profile`)
-    REFERENCES `InstaKilo`.`user_profiles` (`id`)
+    REFERENCES `InstaKilo`.`user_profile` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `InstaKilo`.`photos`
+-- Table `InstaKilo`.`photo`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `InstaKilo`.`photos` ;
+DROP TABLE IF EXISTS `InstaKilo`.`photo` ;
 
-CREATE TABLE IF NOT EXISTS `InstaKilo`.`photos` (
+CREATE TABLE IF NOT EXISTS `InstaKilo`.`photo` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `owner` INT UNSIGNED NOT NULL,
   `title` VARCHAR(50) NULL,
   `hashtags` VARCHAR(50) NULL,
-  `file_name` VARCHAR(165) NOT NULL,
+  `date_time_added` DATETIME NOT NULL,
+  `orig_file_name` VARCHAR(170) NOT NULL,
+  `thumb_file_name` VARCHAR(170) NOT NULL,
   PRIMARY KEY (`id`, `owner`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
-  UNIQUE INDEX `file_name_UNIQUE` (`file_name` ASC) VISIBLE,
   INDEX `owner_idx` (`owner` ASC) VISIBLE,
+  INDEX `date_time` (`date_time_added` ASC) VISIBLE,
   CONSTRAINT `owner`
     FOREIGN KEY (`owner`)
-    REFERENCES `InstaKilo`.`users` (`id`)
+    REFERENCES `InstaKilo`.`user` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -94,15 +96,15 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `InstaKilo`.`transformations`
+-- Table `InstaKilo`.`transformation`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `InstaKilo`.`transformations` ;
+DROP TABLE IF EXISTS `InstaKilo`.`transformation` ;
 
-CREATE TABLE IF NOT EXISTS `InstaKilo`.`transformations` (
+CREATE TABLE IF NOT EXISTS `InstaKilo`.`transformation` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `original` INT UNSIGNED NOT NULL,
   `trans_type` INT UNSIGNED NOT NULL,
-  `file_name` VARCHAR(165) NOT NULL,
+  `file_name` VARCHAR(170) NOT NULL,
   PRIMARY KEY (`id`, `original`, `trans_type`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
   UNIQUE INDEX `file_name_UNIQUE` (`file_name` ASC) VISIBLE,
@@ -110,7 +112,7 @@ CREATE TABLE IF NOT EXISTS `InstaKilo`.`transformations` (
   INDEX `original_photo_idx` (`original` ASC) VISIBLE,
   CONSTRAINT `original_photo`
     FOREIGN KEY (`original`)
-    REFERENCES `InstaKilo`.`photos` (`id`)
+    REFERENCES `InstaKilo`.`photo` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `type`
@@ -126,12 +128,12 @@ SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 -- -----------------------------------------------------
--- Data for table `InstaKilo`.`user_profiles`
+-- Data for table `InstaKilo`.`user_profile`
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `InstaKilo`;
-INSERT INTO `InstaKilo`.`user_profiles` (`id`, `type`) VALUES (DEFAULT, 'user');
-INSERT INTO `InstaKilo`.`user_profiles` (`id`, `type`) VALUES (DEFAULT, 'admin');
+INSERT INTO `InstaKilo`.`user_profile` (`id`, `type`) VALUES (DEFAULT, 'user');
+INSERT INTO `InstaKilo`.`user_profile` (`id`, `type`) VALUES (DEFAULT, 'admin');
 
 COMMIT;
 
@@ -142,8 +144,8 @@ COMMIT;
 START TRANSACTION;
 USE `InstaKilo`;
 INSERT INTO `InstaKilo`.`transformation_type` (`id`, `description`) VALUES (DEFAULT, 'B&W');
-INSERT INTO `InstaKilo`.`transformation_type` (`id`, `description`) VALUES (DEFAULT, 'Sepia');
-INSERT INTO `InstaKilo`.`transformation_type` (`id`, `description`) VALUES (DEFAULT, 'Barrel Distortion');
+INSERT INTO `InstaKilo`.`transformation_type` (`id`, `description`) VALUES (DEFAULT, 'Warm');
+INSERT INTO `InstaKilo`.`transformation_type` (`id`, `description`) VALUES (DEFAULT, 'High Contrast');
 
 COMMIT;
 

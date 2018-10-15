@@ -38,7 +38,7 @@ def create_user():
         session['user'] = username
         session['authorized'] = True
 
-        return redirect(url_for('welcome'))
+        return redirect(url_for('render_gallery'))
     else:
         # Getting here means that either there was a database  error or the username is already taken
         # since the user will have to retry anyways, we might as well say there was an error with the

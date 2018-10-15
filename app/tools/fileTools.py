@@ -1,21 +1,45 @@
 import os
-from werkzeug.utils import secure_filename
 from app.tools.hashTools import Hash
 
+
 class FileManager:
-    @staticmethod
-    def allowed_file(filename):
-        allowed_extensions = set(['png', 'jpg', 'jpeg', 'gif'])
+    def __init__(self):
+        self.directory = "app/static/uploaded_photos/"
+        self.url_for = "uploaded_photos/"
+        self.allowed_extensions = set(['png', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff'])
+        self.last_saved_full_path = ""
 
+        if not os.path.exists(self.directory):
+            os.makedirs(self.directory)
+
+    def allowed_file(self, filename):
         return '.' in filename and \
-               filename.rsplit('.', 1)[1].lower() in allowed_extensions
+               filename.rsplit('.', 1)[1].lower() in self.allowed_extensions
 
-    @staticmethod
-    def save_file(file):
-        if file and FileManager.allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            salt, hashfile = Hash.get_salt_hash(filename)
-            filename = "$" + salt + "$" + hashfile.decode("utf-8")
-            file.save(os.path.join("./app/static/UserImages", filename))
+    def save_file(self, file):
+        if file and self.allowed_file(file.filename):
+            extension = FileManager.get_file_extension(file.filename)
+            filename = FileManager.gen_unique_file_name(file.filename) + extension
+            file.save(os.path.join(self.directory, filename))
+            self.last_saved_full_path = os.path.join(self.directory, filename)
             return True
         return False
+
+    @staticmethod
+    def gen_unique_file_name(filename):
+        salt, hashfile = Hash.get_salt_hash(filename)
+        return "$" + salt + "$" + hashfile.decode("utf-8")
+
+    @staticmethod
+    def get_file_extension(filename):
+        return "." + filename.split(".")[1]
+
+    def full_path_for(self, filename):
+        return self.directory+filename
+
+    def url_for(self, filename):
+        return self.url_for+filename
+
+    @staticmethod
+    def extract_filename(full_path):
+        return full_path.split("/")[-1]

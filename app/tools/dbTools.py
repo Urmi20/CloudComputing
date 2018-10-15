@@ -1,5 +1,6 @@
 from flask import g as resources
 import mysql.connector
+import time
 from app import webapp
 
 
@@ -20,7 +21,10 @@ class DataBaseManager:
         """This method is only supposed to be called from DataBaseManager's constructor"""
         return mysql.connector.connect(user=self.user, password=self.password, host=self.host, database=self.database)
 
-    def _run_query(self, query, parameters):
+    def _commit(self):
+        self.db.commit()
+
+    def _run_query(self, query, parameters, auto_commit=True):
         cursor = self.db.cursor()
         rows = []
         try:
@@ -34,7 +38,8 @@ class DataBaseManager:
                 # no returned results. We can ignore this error.
                 pass
 
-            self.db.commit()
+            if auto_commit:
+                self._commit()
 
         except mysql.connector.Error:
             self.db.rollback()
@@ -45,11 +50,38 @@ class DataBaseManager:
         return True, rows
 
     def add_user(self, username, first_name, last_name, email, password):
-        query = ('insert into users (id, profile, name, first_name, last_name, email, pw_salt_hash) '
-                 'values (DEFAULT, (select id from user_profiles where type = "user"), %s, %s, %s, %s, %s)')
+        query = ('insert into user (id, profile, name, first_name, last_name, email, pw_salt_hash) '
+                 'values (DEFAULT, (select id from user_profile where type = "user"), %s, %s, %s, %s, %s)')
         parameters = (username, first_name, last_name, email, password)
 
         return self._run_query(query, parameters)[0]
+
+    def add_photos(self, owner, title, hashtag, saved_files):
+        now = time.strftime("%Y-%m-%d %H:%M:%S")
+        query = ("insert into photo (id, owner, title, hashtags, date_time_added, orig_file_name, thumb_file_name) "
+                 "values (DEFAULT, (select id from user where name = %s), %s, %s, %s, %s, %s)")
+        parameters = (owner, title, hashtag, now, saved_files.get("original"), saved_files.get("thumbnail"))
+        if not self._run_query(query, parameters, False)[0]:
+            return False
+
+        transformations = list()
+        transformations.append(("warm", saved_files.get("warm")))
+        transformations.append(("b&w", saved_files.get("b&w")))
+        transformations.append(("high contrast", saved_files.get("high contrast")))
+
+        for trans_type, file_name in transformations:
+            query = ('insert into transformation (id, original, trans_type, file_name) '
+                     'values (DEFAULT, '
+                             '(select id from photo where orig_file_name = %s), '
+                             '(select id from transformation_type where description = %s), '
+                             '%s)')
+            parameters = (saved_files.get("original"), trans_type, file_name)
+            if not self._run_query(query, parameters, False)[0]:
+                return False
+
+        self._commit()
+
+        return True
 
     @staticmethod
     def split_salt_hash(salt_hash):
@@ -59,7 +91,7 @@ class DataBaseManager:
 
     def get_user_pwd_hash(self, username):
         query = ('select pw_salt_hash '
-                 'from users '
+                 'from user '
                  'where name = %s')
         parameters = (username,)
 
@@ -72,6 +104,30 @@ class DataBaseManager:
 
         return salt, pw_hash
 
+    def get_user_thumbs_url(self, username, f_mgr):
+        query = ("select id, CONCAT(%s, thumb_file_name) from photo where owner = (select id from user where name = %s)"
+                 "order by date_time_added desc")
+        parameters = (f_mgr.url_for, username)
+
+        rows = self._run_query(query, parameters)[1]
+
+        return rows
+
+    def get_user_full_sizes_url(self, username, img_id, f_mgr):
+        query = ("select title as transformation_type, CONCAT(%s, orig_file_name) "
+                 "from photo where id = %s " 
+                 "and owner = (select id from user where name = %s) " 
+                 "UNION "
+                 "select description, CONCAT(%s, file_name) "
+                 "from transformation, photo, user, transformation_type "
+                 "where original = %s and transformation.original = photo.id and " 
+                 "photo.owner = (select id from user where name = %s) and " 
+                 "transformation.trans_type = transformation_type.id")
+        parameters = (f_mgr.url_for, img_id, username, f_mgr.url_for, img_id, username)
+
+        rows = self._run_query(query, parameters)[1]
+
+        return rows
 
 @webapp.teardown_appcontext
 def teardown_db(exception):

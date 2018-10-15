@@ -14,6 +14,7 @@ def recovery_submit():
     recipient = request.form.get("email")
 
     email = Email("smtp.gmail.com", 587, "ece1779.project.fall.2018", "aSd123qWe456zxc")
-    email.send("ece1779.project.fall.2018@gmail.com", recipient, "Password Recovery", "This message should have a subject")
+    email.send("ece1779.project.fall.2018@gmail.com", recipient, "InstaKilo Password Recovery",
+               "Here is your link to change your password")
 
     return render_template("index.html")
