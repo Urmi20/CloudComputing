@@ -2,6 +2,12 @@ from flask import g as resources
 import mysql.connector
 import time
 from app import webapp
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from os import urandom
+from base64 import b64encode
+
+key = urandom(24)
+secret_key = b64encode(key).decode('utf-8')
 
 
 class DataBaseManager:
@@ -83,6 +89,21 @@ class DataBaseManager:
 
         return True
 
+    def email_already_exists(self, email):
+        query = ('select name '
+                 'from user '
+                 'where email = %s')
+        parameters = (email,)
+        return self._run_query(query, parameters)[1]
+
+    def update_new_password(self, new_pwd, email):
+        query = ('update user '
+                 'set pw_salt_hash = %s '
+                 'where email = %s')
+        parameters = (new_pwd, email)
+        print(parameters)
+        return self._run_query(query, parameters)[0]
+
     @staticmethod
     def split_salt_hash(salt_hash):
         salt, pw_hash = salt_hash.rsplit("$", 1)
@@ -128,6 +149,21 @@ class DataBaseManager:
         rows = self._run_query(query, parameters)[1]
 
         return rows
+
+    @staticmethod
+    def get_token(email, expires_sec=300):
+        s = Serializer(secret_key, expires_sec)
+        return s.dumps({'user_id': email}).decode('utf-8')
+
+    @staticmethod
+    def verify_token(token):
+        s = Serializer(secret_key)
+        try:
+            user_email = s.loads(token)['user_id']
+        except:
+            return None
+        return user_email
+
 
 @webapp.teardown_appcontext
 def teardown_db(exception):
