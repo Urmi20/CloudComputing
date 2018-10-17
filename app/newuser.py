@@ -32,9 +32,9 @@ def create_user():
     stored_pwd = "$" + salt + "$" + hashpwd.decode("utf-8")
 
     dbm = DataBaseManager()
-    email_success = dbm.email_already_exists(email)
+    email_already_registered = dbm.email_already_exists(email)
 
-    if not email_success:
+    if not email_already_registered:
         db_success = dbm.add_user(username, first_name, last_name, email, stored_pwd)
 
         if db_success:
@@ -43,8 +43,8 @@ def create_user():
 
             return redirect(url_for('render_gallery'))
         else:
-            # Getting here means that either there was a database  error or the username is already taken
-            # since the user will have to retry anyways, we might as well say there was an error with the
+            # Getting here means that either there was a database  error or the username is already taken.
+            # Since the user will have to retry anyways, we might as well say there was an error with the
             # chosen username
             err_msg = ["Username is unavailable."]
             return render_template("newuser.html", error=err_msg, username=username, first_name=first_name,

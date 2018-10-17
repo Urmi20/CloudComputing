@@ -48,6 +48,7 @@ CREATE TABLE IF NOT EXISTS `InstaKilo`.`user` (
   UNIQUE INDEX `user_name_UNIQUE` (`name` ASC) VISIBLE,
   UNIQUE INDEX `user_id_UNIQUE` (`id` ASC) VISIBLE,
   INDEX `profile_idx` (`profile` ASC) VISIBLE,
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
   CONSTRAINT `profile`
     FOREIGN KEY (`profile`)
     REFERENCES `InstaKilo`.`user_profile` (`id`)
