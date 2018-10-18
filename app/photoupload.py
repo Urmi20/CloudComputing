@@ -18,16 +18,23 @@ def photo_upload_landing():
 @webapp.route('/photo_upload', methods=['POST'])
 def photo_upload():
     if 'authorized' in session and session['authorized'] is True:
+        input_title = request.form.get("title")
+        input_hashtags = request.form.get("hashtags")
+
         field = validate.regex()
         owner = session["user"]
-        title = field.validate(field.photo_title_pattern, request.form.get("title"))
-        hashtags = field.validate(field.photo_hashtag_pattern, request.form.get("hashtags"))
+        title = field.validate(field.photo_title_pattern, input_title)
+        hashtags = field.validate(field.photo_hashtag_pattern, input_hashtags)
 
         if not title:
-            return render_template("gallery.html", up_error="Invalid title.", title=title, hashtags=hashtags)
+            return render_template("uploadphoto.html",
+                                   up_error="Invalid title. Hover cursor over field for requirements.",
+                                   title=input_title, hashtags=input_hashtags)
 
         if not hashtags:
-            return render_template("gallery.html", up_error="Invalid hashtags.", title=title, hashtags=hashtags)
+            return render_template("uploadphoto.html",
+                                   up_error="Invalid hashtags. Hover cursor over fields for requirements.",
+                                   title=input_title, hashtags=input_hashtags)
 
         file_manager = FileManager()
         file = extract_photo_from_request()

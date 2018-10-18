@@ -13,19 +13,27 @@ def create_user_landing():
 
 @webapp.route('/newuser/create', methods=['POST'])
 def create_user():
+    input_username = request.form.get("username")
+    input_first_name = request.form.get("first_name")
+    input_last_name = request.form.get("last_name")
+    input_email = request.form.get("email")
+    input_password = request.form.get("password")
+    input_password_conf = request.form.get("password_conf")
+
     field = validate.regex()
-    username = field.validate(field.user_name_pattern, request.form.get("username"))
-    first_name = field.validate(field.first_name_pattern, request.form.get("first_name"))
-    last_name = field.validate(field.last_name_pattern, request.form.get("last_name"))
-    email = field.validate(field.email_pattern, request.form.get("email"))
-    password = field.validate(field.password_pattern, request.form.get("password"))
-    password_conf = password == request.form.get("password_conf")
+    username = field.validate(field.user_name_pattern, input_username)
+    first_name = field.validate(field.first_name_pattern, input_first_name)
+    last_name = field.validate(field.last_name_pattern, input_last_name)
+    email = field.validate(field.email_pattern, input_email)
+    password = field.validate(field.password_pattern, input_password)
+    password_conf = password == input_password_conf
 
     err_msg = compose_error_message(username, first_name, last_name, email, password, password_conf)
 
     if err_msg is not None:
-        return render_template("newuser.html", error=err_msg, username=username, first_name=first_name,
-                               last_name=last_name, email=email, password=password, password_conf=password_conf)
+        return render_template("newuser.html", error=err_msg, username=input_username, first_name=input_first_name,
+                               last_name=input_last_name, email=input_email, password=input_password,
+                               password_conf=input_password_conf)
 
     pwd_manager = Hash()
     salt, hashpwd = pwd_manager.get_salt_hash(password)
@@ -47,8 +55,9 @@ def create_user():
             # Since the user will have to retry anyways, we might as well say there was an error with the
             # chosen username
             err_msg = ["Username is unavailable."]
-            return render_template("newuser.html", error=err_msg, username=username, first_name=first_name,
-                                   last_name=last_name, email=email, password=password, password_conf=password_conf)
+            return render_template("newuser.html", error=err_msg, username=input_username, first_name=input_first_name,
+                                   last_name=input_last_name, email=input_email, password=input_password,
+                                   password_conf=input_password_conf)
     else:
         err_msg = ["An account already exists with this Email"]
         return render_template("newuser.html", error=err_msg, username=username, first_name=first_name,

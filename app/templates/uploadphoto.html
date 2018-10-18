@@ -14,8 +14,9 @@
                placeholder="Title" class="textbox"><br/>
         <input type="text" name="hashtags" value="{{hashtags if hashtags!=None}}"
                required pattern = "\B(\#[a-zA-Z-_0-9 ]+\b)(?!;)"
+               title="Words and numbers, each starting with #"
                placeholder="#Hashtags" class="textbox"><br/>
-        <input type="file" name="uploadedfile" value="Choose Image" class="button"/>
+        <input type="file" name="uploadedfile" value="Choose Image" accept=".png, .jpg, .jpeg, .gif, .bmp, .tiff"class="button"/>
         {% if up_error!=None %}
             <span style="color:red;">{{ up_error }}</span>
         {% endif %}

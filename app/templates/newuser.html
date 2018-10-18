@@ -22,7 +22,7 @@
 
                 <input type="text" name="first_name" value="{{first_name if first_name!=None}}"
                        required pattern="[a-zA-Z ]{3,45}$"
-                       title="From 3 to 45 characters"
+                       title="From 3 to 45 characters (spaces included). No special characters or numbers."
                        placeholder="First name" class="textbox"/><br/><br/>
 
                 <input type="text" name="last_name" value="{{last_name if last_name!=None}}"
