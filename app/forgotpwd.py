@@ -56,10 +56,6 @@ def change_pwd(token):
     password = field.validate(field.password_pattern, request.form.get("password"))
     password_conf = password == request.form.get("password_conf")
 
-    print(user_email)
-    print(password)
-    print(password_conf)
-
     err_msg = field.compose_error_message(password, password_conf)
 
     if user_email is None:
@@ -72,10 +68,7 @@ def change_pwd(token):
     salt, hashpwd = pwd_manager.get_salt_hash(password)
     stored_pwd = "$" + salt + "$" + hashpwd.decode("utf-8")
 
-    print(stored_pwd)
-    print(user_email)
+    dbm.update_new_password(stored_pwd, user_email)
 
-    update_pwd = dbm.update_new_password(stored_pwd, user_email)
-    print(update_pwd)
     return redirect(url_for('render_gallery'))
 
