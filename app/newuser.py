@@ -7,12 +7,18 @@ from app.tools.hashTools import Hash
 
 @webapp.route('/newuser')
 def create_user_landing():
+    if 'authorized' in session and session['authorized'] is True:
+        return redirect(url_for("render_gallery"))
+
     return render_template("newuser.html", username=None,  first_name=None, last_name=None,
                            email=None, password=None, password_conf=None)
 
 
 @webapp.route('/newuser/create', methods=['POST'])
 def create_user():
+    if 'authorized' in session and session['authorized'] is True:
+        return redirect(url_for("render_gallery"))
+
     input_username = request.form.get("username")
     input_first_name = request.form.get("first_name")
     input_last_name = request.form.get("last_name")
