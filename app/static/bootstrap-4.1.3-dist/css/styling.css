@@ -57,6 +57,30 @@ ul{
     background-color:black;
 }
 
+.header{
+    list-style-type:none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color:black;
+}
+
+
+.content{
+    padding:10px;
+}
+
+.sticky{
+    position:fixed;
+    top:0;
+    width:100%;
+}
+
+.sticky + .content{
+    padding-top:102px;
+}
+
+
 li {
     float: left;
 }
@@ -73,3 +97,6 @@ li a:hover {
     background-color:transparent;
 }
 
+.galleryimage{
+    margin:auto;
+}
