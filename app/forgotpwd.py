@@ -28,9 +28,9 @@ def recovery_submit():
         user = email_success
         email = Email("smtp.gmail.com", 587, "ece1779.project.fall.2018", "aSd123qWe456zxc")
         email.send("ece1779.project.fall.2018@gmail.com", recipient, "Password Recovery",
-                   f'''Hi {user},\n\n
+                   '''Hi {},\n\n
                        visit the following link to reset your password - 
-                       {url_for('reset_token', token=token, _external=True)}''')
+                       {}'''.format(user[0][0], url_for('reset_token', token=token, _external=True)))
 
         return render_template("index.html")
     else:
