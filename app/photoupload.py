@@ -1,7 +1,8 @@
-from flask import render_template, request, session, redirect, url_for
+from flask import render_template, request, session, redirect, url_for, Response
 from app import webapp
 from app.tools.fileTools import FileManager
 from app.tools.imageTools import ImageTransform
+from app.tools.hashTools import Hash
 from app.tools.dbTools import DataBaseManager
 from app.tools import validate
 
@@ -49,11 +50,37 @@ def extract_photo_from_request():
         return None
 
     # Checking for file contents
-    if 'file' not in request.files:
+    if 'uploadedfile' not in request.files:
         return None
-    file = request.files['file']
+    file = request.files['uploadedfile']
     # Checking for "no selection"
     if file.filename == '':
         return None
 
     return file
+
+
+@webapp.route('/test/FileUpload', methods=['POST'])
+def test_upload():
+    userID = request.form.get("userID")
+    password = request.form.get("password")
+    file = extract_photo_from_request()
+
+    pwd_manager = Hash()
+    if not pwd_manager.check_password(userID, password):
+        return Response(status=401)
+
+    file_manager = FileManager()
+    if not file or not file_manager.save_file(file):
+        return Response(status=400)
+
+    saved_files = ImageTransform.make_transformations(file_manager.last_saved_full_path)
+    saved_files["original"] = FileManager.extract_filename(file_manager.last_saved_full_path)
+
+    dbm = DataBaseManager()
+    db_success = dbm.add_photos(userID, "Auto Uploaded", "#test_image", saved_files)
+
+    if db_success:
+        return Response(status=200)
+    else:
+        return Response(status=500)

@@ -11,9 +11,8 @@ secret_key = b64encode(key).decode('utf-8')
 
 
 class DataBaseManager:
-    # TODO: we should not use ROOT. Create a "common" user. Can we have this data encrypted?
-    user = "root"
-    password = "password"
+    user = "low_power"
+    password = "qweQWE123!@#"
     host = "127.0.0.1"
     database = "InstaKilo"
 
@@ -169,6 +168,4 @@ class DataBaseManager:
 def teardown_db(exception):
     db = getattr(resources, "_database", None)
     if db is not None:
-        # TODO: Use this for debugging only. Delete this for the final release
-        print("Closing DB")
         db.close()

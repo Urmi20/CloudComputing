@@ -26,7 +26,7 @@
                 <input type="text" name="hashtags" value="{{hashtags if hashtags!=None}}"
                        required pattern = "\B(\#[a-zA-Z-_0-9 ]+\b)(?!;)"
                        placeholder="#Hashtags" class="textbox"><br/>
-                <input type="file" name="file" value="Choose Image" class="button"/>
+                <input type="file" name="uploadedfile" value="Choose Image" class="button"/>
                 {% if up_error!=None %}
                     <span style="color:red;">{{ up_error }}</span>
                 {% endif %}
