@@ -4,13 +4,8 @@
     <li style="float:right;"><a href="{{url_for('sign_out')}}">Sign out</a></li>
     <li style="float:right;"><a href="{{url_for('index')}}">Back to gallery</a></li>
 </ul>
-<form method="post" action="sign_out" class="container">  <!-- add action path-->
-    <legend class="text-center case" style="margin-top:40px;"><h1>Tell us more about your photo</h1></legend>
-    <div class="text-center forms container">
-        <input type="submit" value="Sign out" class="button"/><br>
-    </div>
-</form>
-<br/><br/>
+<legend class="text-center case" style="margin-top:40px;"><h1>Tell us more about your photo</h1></legend>
+<br/>
 <form method="post" enctype="multipart/form-data" action={{url_for('photo_upload')}} class="container">
     <div class="text-center forms container">
         <input type="text" name="title" value="{{title if title!=None}}"
