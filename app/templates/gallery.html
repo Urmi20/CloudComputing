@@ -1,30 +1,23 @@
 {% extends "base.html" %}
 {% block content %}
-    <ul>
-        <li><a href="{{url_for('render_gallery')}}">{{username}}'s Gallery</a></li>
-        <li><a href="{{url_for('photo_upload_landing')}}"></a></li>
-    </ul>
+<ul>
+    <li><h1 style="color:white;">{{username}}'s Gallery</h1></li>
+    <li style="float:right;"><a href="{{url_for('sign_out')}}">Sign out</a></li>
+    <li style="float:right;"><a href="{{url_for('photo_upload_landing')}}">Upload photo</a></li>
+</ul>
 
-     <form method="get" enctype="multipart/form-data" action={{url_for('photo_upload_landing')}} class="container"
-     style="display: inline;">
-         <input type="submit" name="upload"  value="Upload new photo" class="button" style="display: inline;">
-    </form>
-    <form method="post" action={{url_for('sign_out')}} class="container" style="display: inline;">
-            <input type="submit" value="Sign out" class="button" style="display: inline;"/><br>
-    </form>
-
-    <table style="table-layout:fixed; text-align:center;">
+<table style="table-layout:fixed; text-align:center;">
+    <tr>
+    {% for id, photo in photos %}
+        <td align="center" valign="center">
+            <a href="{{ url_for('render_light_box', id=id) }}">
+                <img src="{{ url_for('static', filename=photo) }}">
+            </a>
+        </td>
+        {% if loop.index%4 == 0 %}
+        </tr>
         <tr>
-        {% for id, photo in photos %}
-            <td align="center" valign="center">
-                <a href="{{ url_for('render_light_box', id=id) }}">
-                    <img src="{{ url_for('static', filename=photo) }}">
-                </a>
-            </td>
-            {% if loop.index%4 == 0 %}
-            </tr>
-            <tr>
-            {% endif %}
-        {% endfor %}</tr>
-    </table>
+        {% endif %}
+    {% endfor %}</tr>
+</table>
 {% endblock %}

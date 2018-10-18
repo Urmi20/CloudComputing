@@ -1,27 +1,23 @@
 {% extends "base.html" %}
 {% block content %}
-    <ul>
-        <li><a href="{{url_for('render_gallery')}}">{{photos[0][0]}}'s lightbox</a></li>
-    </ul>
-     <form method="get" enctype="multipart/form-data" action={{url_for('photo_upload_landing')}} class="container"
-     style="display: inline;">
-         <input type="submit" name="upload"  value="Upload new photo" class="button" style="display: inline;">
-    </form>
-    <form method="post" action={{url_for('sign_out')}} class="container" style="display: inline;">
-            <input type="submit" value="Sign out" class="button" style="display: inline;"/><br>
-    </form>
+<ul>
+    <li><h1 style="color:white;">{{photos[0][0]}}'s lightbox</h1></li>
+    <li style="float:right;"><a href="{{url_for('sign_out')}}">Sign out</a></li>
+    <li style="float:right;"><a href="{{url_for('photo_upload_landing')}}">Upload photo</a></li>
+    <li style="float:right;"><a href="{{url_for('render_gallery')}}">{{username}}'s Gallery</a></li>
+</ul>
 
-    <table style="table-layout:fixed; text-align:center;">
+<table style="table-layout:fixed; text-align:center;">
+    <tr>
+    {% for type, photo in photos %}
+        <td align="center" valign="center">
+                {{type}}
+                <img src="{{ url_for('static', filename=photo) }}", width="720">
+        </td>
+        {% if loop.index%2 == 0 %}
+        </tr>
         <tr>
-        {% for type, photo in photos %}
-            <td align="center" valign="center">
-                    {{type}}
-                    <img src="{{ url_for('static', filename=photo) }}", width="720">
-            </td>
-            {% if loop.index%2 == 0 %}
-            </tr>
-            <tr>
-            {% endif %}
-        {% endfor %}</tr>
-    </table>
+        {% endif %}
+    {% endfor %}</tr>
+</table>
 {% endblock %}

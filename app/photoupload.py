@@ -9,7 +9,10 @@ from app.tools import validate
 
 @webapp.route('/photo_upload')
 def photo_upload_landing():
-    return render_template("uploadphoto.html")
+    if 'authorized' in session and session['authorized'] is True:
+        return render_template("uploadphoto.html")
+    else:
+        return redirect(url_for('index'))
 
 
 @webapp.route('/photo_upload', methods=['POST'])
@@ -30,7 +33,8 @@ def photo_upload():
         file = extract_photo_from_request()
 
         if not file or not file_manager.save_file(file):
-            return render_template("gallery.html", up_error="Please select a valid file.", title=title, hashtags=hashtags)
+            return render_template("uploadphoto.html",
+                                   up_error="Please select a valid file.", title=title, hashtags=hashtags)
 
         saved_files = ImageTransform.make_transformations(file_manager.last_saved_full_path)
         saved_files["original"] = FileManager.extract_filename(file_manager.last_saved_full_path)
@@ -39,7 +43,8 @@ def photo_upload():
         db_success = dbm.add_photos(owner, title, hashtags, saved_files)
 
         if not db_success:
-            return render_template("uploadphoto.html", up_error="There was an error. Please try again.", title=title, hashtags=hashtags)
+            return render_template("uploadphoto.html",
+                                   up_error="There was an error. Please try again.", title=title, hashtags=hashtags)
 
         return redirect(url_for('render_gallery'))
     return redirect(url_for('index'))

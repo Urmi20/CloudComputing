@@ -1,23 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+    <ul>
+        <li><a href="{{url_for('create_user_landing')}}">New User</a></li>
+        <li><a href="{{url_for('index')}}">Sign In</a></li>
+        <li style="float:right;"><a href="{{url_for('index')}}">Back</a></li>
+    </ul>
+    <form method="post" action="recovery_submit" class="container"> <!-- Redirected to index.py-->  <!-- add action path-->
+        <legend class="text-center case" style="margin-top:40px;"><h1>Password recovery</h1></legend>
 
-    {% extends "base.html" %}
-	{% block content %}
-    <body class='fontstyle'>
-        <ul>
-			<li><a href="{{url_for('create_user_landing')}}">New User</a></li>
-			<li><a href="{{url_for('index')}}">Sign In</a></li>
-            <li style="float:right;"><a href="{{url_for('index')}}">Back</a></li>
-		</ul>
-        <form method="post" action="recovery_submit" class="container"> <!-- Redirected to index.py-->  <!-- add action path-->
-            <legend class="text-center case" style="margin-top:40px;"><h1>Password recovery</h1></legend>
-			
-            <div class="text-center forms container">
-				<label class="fontsize">Your email</label><br/>
-				<input type="text" name="email" class="textbox"/><br/>
-                {% if error_value== True %}
-					Email not registered
-				{% endif %}<br/><br>
-				<input type="submit" class="button" value="Submit"/><br/><br>
+        <div class="text-center forms container">
+            <label class="fontsize">Your email</label><br/>
+            <input type="text" name="email" class="textbox"/><br/>
+            {% if error_value== True %}
+                Email not registered
+            {% endif %}<br/><br>
+            <input type="submit" class="button" value="Submit"/><br/><br>
 
-			</div>
-        </form>
-    {% endblock %}
+        </div>
+    </form>
+{% endblock %}

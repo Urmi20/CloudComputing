@@ -1,51 +1,49 @@
-    {% extends "base.html" %}
-	{% block content %}
+{% extends "base.html" %}
+{% block content %}
+    <ul>
+        <li style="float:right;"><a href="{{url_for('index')}}">Back</a></li>
+    </ul>
+    <form name="registration" method="post" action="{{url_for('create_user')}}" class="container">
+        <legend class="text-center case" style="margin-top:40px;">
+        <h1>Create your InstaKilo account</h1></legend>
 
-        <ul>
-			<li style="float:right;"><a href="{{url_for('index')}}">Back</a></li>
-			<li><a href="{{url_for('index')}}">Sign In</a></li>
-		</ul>
-        <form name="registration" method="post" action="{{url_for('create_user')}}" class="container">
-            <legend class="text-center case" style="margin-top:40px;">
-            <h1>Create your InstaKilo account</h1></legend>
+         <div class="text-center forms container">
+                {% if error %}
+                <br/>
+                {% endif %}
+                {% for err in error%}
+                <span style="color:red;">{{ err }}</span><br/>
+                {% endfor %}
+                <br/>
+                <input type="text" name="username" value="{{username if username!=None}}"
+                       required pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$"
+                       title="Up to 20 characters, numbers and -_\."
+                       placeholder="User Name" class="textbox"/><br/><br/>
 
-             <div class="text-center forms container">
-                    {% if error %}
-                    <br/>
-                    {% endif %}
-                    {% for err in error%}
-                    <span style="color:red;">{{ err }}</span><br/>
-				    {% endfor %}
-                    <br/>
-                    <input type="text" name="username" value="{{username if username!=None}}"
-                           required pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$"
-                           title="Up to 20 characters, numbers and -_\."
-                           placeholder="User Name" class="textbox"/><br/><br/>
+                <input type="text" name="first_name" value="{{first_name if first_name!=None}}"
+                       required pattern="[a-zA-Z ]{3,45}$"
+                       title="From 3 to 45 characters"
+                       placeholder="First name" class="textbox"/><br/><br/>
 
-                    <input type="text" name="first_name" value="{{first_name if first_name!=None}}"
-                           required pattern="[a-zA-Z ]{3,45}$"
-                           title="From 3 to 45 characters"
-                           placeholder="First name" class="textbox"/><br/><br/>
+                <input type="text" name="last_name" value="{{last_name if last_name!=None}}"
+                       required pattern="^[a-zA-Z ][a-zA-Z0-9-. ]{1,100}$"
+                       title="Up to 100 characters (spaces included), numbers and -."
+                       placeholder="Last name" class="textbox"/><br/><br/>
 
-                    <input type="text" name="last_name" value="{{last_name if last_name!=None}}"
-                           required pattern="^[a-zA-Z ][a-zA-Z0-9-. ]{1,100}$"
-                           title="Up to 100 characters (spaces included), numbers and -."
-                           placeholder="Last name" class="textbox"/><br/><br/>
+                <input type="email" name="email" value="{{email if email!=None}}"
+                       required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+                       placeholder="email" class="textbox"/><br/><br/>
 
-                    <input type="email" name="email" value="{{email if email!=None}}"
-                           required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
-                           placeholder="email" class="textbox"/><br/><br/>
+                <input type="password" name="password" value=""
+                       required pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$"
+                       title="Minimum length: 8. Must include at least one uppercase and one lowercase character, one number and one special character"
+                       placeholder="Password" class="textbox"/><br/><br/>
 
-                    <input type="password" name="password" value=""
-                           required pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$"
-                           title="Minimum length: 8. Must include at least one uppercase and one lowercase character, one number and one special character"
-                           placeholder="Password" class="textbox"/><br/><br/>
+                <input type="password" name="password_conf" value=""
+                       required placeholder="Confirm password"
+                       title="Must match the password"class="textbox"/><br/><br/>
 
-                    <input type="password" name="password_conf" value=""
-                           required placeholder="Confirm password"
-                           title="Must match the password"class="textbox"/><br/><br/>
-
-                 <input type="submit" class="button" value="Submit"/><br/><br/>
-             </div>
-        </form>
-    {% endblock %}
+             <input type="submit" class="button" value="Submit"/><br/><br/>
+         </div>
+    </form>
+{% endblock %}

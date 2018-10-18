@@ -5,7 +5,7 @@
 }
 
 .bkgrnd {
-    background:url("../../Background.png") no-repeat right center;
+    background:url("../../Background.jpg") no-repeat right center;
     background-repeat: round;
     background-attachment: fixed;
     background-position-x:20%;

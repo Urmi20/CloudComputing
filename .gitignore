@@ -1,3 +1,6 @@
+#Mac useless files
+.DS_Store
+
 #uploaded images
 app/static/uploaded_photos/
 

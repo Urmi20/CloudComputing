@@ -11,5 +11,7 @@ def render_light_box(id):
         f_mgr = FileManager()
         photos = dbm.get_user_full_sizes_url(session['user'], id, f_mgr)
 
-        return render_template('lightbox.html', username=session['user'], photos=photos)
+        if photos:
+            return render_template('lightbox.html', username=session['user'], photos=photos)
+
     return redirect(url_for('index'))

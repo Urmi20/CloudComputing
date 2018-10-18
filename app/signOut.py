@@ -2,7 +2,7 @@ from flask import render_template, session
 from app import webapp
 
 
-@webapp.route('/sign_out', methods=['POST'])
+@webapp.route('/sign_out', methods=['GET'])
 def sign_out():
     session.clear()
 

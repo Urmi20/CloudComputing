@@ -1,29 +1,29 @@
-	{% extends "base.html" %}
-	{% block content %}
-		<ul>
-			<li><h1>IK</h1></li>
-		</ul>
+{% extends "base.html" %}
+{% block content %}
+	<ul>
+		<li><h1>IK</h1></li>
+	</ul>
 
-        <form method="post" action="authenticate_user"> <!-- Redirected to index.py-->  <!-- add action path-->
-            <legend class="text-center" style="margin-top:40px;"><h1>InstaKilo</h1></legend>
+	<form method="post" action="authenticate_user"> <!-- Redirected to index.py-->  <!-- add action path-->
+		<legend class="text-center" style="margin-top:40px;"><h1>InstaKilo</h1></legend>
 
-            <div class="text-center forms container">
-				<input type="text" name="username" value="{{username if username!=None}}"
-					   placeholder="Username or email" class="textbox"/><br/><br/>
+		<div class="text-center forms container">
+			<input type="text" name="username" value="{{username if username!=None}}"
+				   placeholder="Username or email" class="textbox"/><br/><br/>
 
-				<input type="password" name="password"
-					   placeholder="Password" class="textbox"/><br/><br/>
+			<input type="password" name="password"
+				   placeholder="Password" class="textbox"/><br/><br/>
 
-				{% if error== True %}
-					Wrong Username or password<br/><br>
-				{% endif %}
+			{% if error== True %}
+				Wrong Username or password<br/><br>
+			{% endif %}
 
-				<a href="{{url_for('forgotpwd')}}" style="color:black;">Forgot your password?</a>
-				<input type="submit" class="button" value="Sign in"/><br/><br/>
+			<a href="{{url_for('forgotpwd')}}" style="color:black;">Forgot your password?</a>
+			<input type="submit" class="button" value="Sign in"/><br/><br/>
 
-				<label>New User?</label>
-				<a href="{{url_for('create_user_landing')}}" style="color:black;"><b>Sign Up Now</b></a>
+			<label>New User?</label>
+			<a href="{{url_for('create_user_landing')}}" style="color:black;"><b>Sign Up Now</b></a>
 
-			</div>
-        </form>
-	{% endblock %}
+		</div>
+	</form>
+{% endblock %}
