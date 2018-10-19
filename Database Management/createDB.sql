@@ -73,7 +73,8 @@ CREATE TABLE IF NOT EXISTS `InstaKilo`.`photo` (
   PRIMARY KEY (`id`, `owner`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
   INDEX `owner_idx` (`owner` ASC) VISIBLE,
-  INDEX `date_time` (`date_time_added` ASC) VISIBLE,
+  INDEX `orig_file` (`orig_file_name` ASC) VISIBLE,
+  INDEX `thum_file` (`thumb_file_name` ASC) VISIBLE,
   CONSTRAINT `owner`
     FOREIGN KEY (`owner`)
     REFERENCES `InstaKilo`.`user` (`id`)
@@ -111,6 +112,7 @@ CREATE TABLE IF NOT EXISTS `InstaKilo`.`transformation` (
   UNIQUE INDEX `file_name_UNIQUE` (`file_name` ASC) VISIBLE,
   INDEX `type_idx` (`trans_type` ASC) VISIBLE,
   INDEX `original_photo_idx` (`original` ASC) VISIBLE,
+  INDEX `file_name` (`file_name` ASC) VISIBLE,
   CONSTRAINT `original_photo`
     FOREIGN KEY (`original`)
     REFERENCES `InstaKilo`.`photo` (`id`)
