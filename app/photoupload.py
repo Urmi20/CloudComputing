@@ -19,39 +19,39 @@ def photo_upload_landing():
 def photo_upload():
     if 'authorized' in session and session['authorized'] is True:
         input_title = request.form.get("title")
-        input_hashtags = request.form.get("hashtags")
+        input_hashtag = request.form.get("hashtag")
 
         field = validate.regex()
         owner = session["user"]
         title = field.validate(field.photo_title_pattern, input_title)
-        hashtags = field.validate(field.photo_hashtag_pattern, input_hashtags)
+        hashtag = field.validate(field.photo_hashtag_pattern, input_hashtag)
 
         if not title:
             return render_template("uploadphoto.html",
                                    up_error="Invalid title. Hover cursor over field for requirements.",
-                                   title=input_title, hashtags=input_hashtags)
+                                   title=input_title, hashtags=input_hashtag)
 
-        if not hashtags:
+        if not hashtag:
             return render_template("uploadphoto.html",
                                    up_error="Invalid hashtags. Hover cursor over fields for requirements.",
-                                   title=input_title, hashtags=input_hashtags)
+                                   title=input_title, hashtags=input_hashtag)
 
         file_manager = FileManager()
         file = extract_photo_from_request()
 
         if not file or not file_manager.save_file(file):
             return render_template("uploadphoto.html",
-                                   up_error="Please select a valid file.", title=title, hashtags=hashtags)
+                                   up_error="Please select a valid file.", title=input_title, hashtags=input_hashtag)
 
         saved_files = ImageTransform.make_transformations(file_manager.last_saved_full_path)
         saved_files["original"] = FileManager.extract_filename(file_manager.last_saved_full_path)
 
         dbm = DataBaseManager()
-        db_success = dbm.add_photos(owner, title, hashtags, saved_files)
+        db_success = dbm.add_photos(owner, title, hashtag, saved_files)
 
         if not db_success:
             return render_template("uploadphoto.html",
-                                   up_error="There was an error. Please try again.", title=title, hashtags=hashtags)
+                                   up_error="There was an error. Please try again.", title=input_title, hashtags=input_hashtag)
 
         return redirect(url_for('render_gallery'))
     return redirect(url_for('index'))

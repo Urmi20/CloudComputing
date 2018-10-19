@@ -12,10 +12,10 @@
                required pattern = "^[a-zA-Z ][a-zA-Z0-9-. ]{3,45}$"
                title = "From 3 to 45 characters (spaces included), numbers and -."
                placeholder="Title" class="textbox"><br/>
-        <input type="text" name="hashtags" value="{{hashtags if hashtags!=None}}"
-               required pattern = "\B(\#[a-zA-Z-_0-9 ]+\b)(?!;)"
-               title="Words and numbers, each starting with #"
-               placeholder="#Hashtags" class="textbox"><br/>
+        <input type="text" name="hashtag" value="{{hashtags if hashtags!=None}}"
+               required pattern = "(?<=\s|^)#(\w*[A-Za-z_]+\w*)"
+               title="Sequence of characters (numbers and _ included), starting with #)"
+               placeholder="#Hashtag" class="textbox"><br/>
         <input type="file" name="uploadedfile" value="Choose Image" accept=".png, .jpg, .jpeg, .gif, .bmp, .tiff"class="button"/>
         {% if up_error!=None %}
             <span style="color:red;">{{ up_error }}</span>
