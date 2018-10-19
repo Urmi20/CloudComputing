@@ -1,12 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
-<ul>
+<ul class="header" id="myHeader">
     <li><h1 style="color:white;">{{photos[0][0]}}'s lightbox</h1></li>
     <li style="float:right;"><a href="{{url_for('sign_out')}}">Sign out</a></li>
     <li style="float:right;"><a href="{{url_for('photo_upload_landing')}}">Upload photo</a></li>
     <li style="float:right;"><a href="{{url_for('render_gallery')}}">{{username}}'s Gallery</a></li>
 </ul>
 
+<div class="galleryimage">
 <table style="table-layout:fixed; text-align:center;">
     <tr>
     {% for type, photo in photos %}
@@ -20,4 +21,23 @@
         {% endif %}
     {% endfor %}</tr>
 </table>
+</div>
+
+<script>
+        window.onscroll=function(){myFunction()};
+
+        var header=document.getElementById("myHeader");
+        var sticky=header.offsetTop;
+
+        function myFunction(){
+            if(window.pageYOffset > sticky){
+                header.classList.add("sticky");
+            }
+            else{
+                header.classList.remove("sticky");
+            }
+        }
+
+</script>
+
 {% endblock %}

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-    <ul>
+    <ul class="header">
         <li style="float:right;"><a href="{{url_for('index')}}">Back</a></li>
     </ul>
     <form name="registration" method="post" action="{{url_for('create_user')}}" class="container">
