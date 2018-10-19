@@ -1,7 +1,6 @@
 import smtplib
 
 
-# TODO: define a __str__ method and a __repr__ method
 class Email:
 
     def __init__(self, server, port, account, password):

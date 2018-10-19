@@ -6,7 +6,6 @@ from app.tools import validate
 from app.tools.hashTools import Hash
 
 
-# TODO: Have a class to hold all the constants
 @webapp.route("/forgotpwd")
 def forgotpwd():
     if 'authorized' in session and session['authorized'] is True:

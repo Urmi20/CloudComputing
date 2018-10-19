@@ -4,12 +4,10 @@ import uuid
 from app.tools.dbTools import DataBaseManager
 
 
-# TODO: define a __str__ method, a __repr__ method and a __init__ if needed
 class Hash:
     @staticmethod
     def get_salt_hash(string, salt=None):
 
-        # TODO: define constants
         if salt is None:
             salt = uuid.uuid4().hex
 
