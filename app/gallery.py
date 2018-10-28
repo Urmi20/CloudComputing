@@ -1,25 +1,10 @@
-from flask import render_template, request, session, redirect, url_for
+from flask import render_template, session, redirect, url_for
 from app.tools.dbTools import DataBaseManager
 from app.tools.fileTools import FileManager
-from app.tools.hashTools import Hash
-from app import webapp
+from app import userUI
 
 
-@webapp.route('/authenticate_user', methods=['POST'])
-def authenticate_user():
-    username = request.form.get('username')
-    password = request.form.get('password')
-
-    pwd_manager = Hash()
-    if pwd_manager.check_password(username, password):
-        session['user'] = username
-        session['authorized'] = True
-        return redirect(url_for('render_gallery'))
-
-    return render_template("index.html", error=True, username=username)
-
-
-@webapp.route('/gallery')
+@userUI.route('/gallery')
 def render_gallery():
     if 'authorized' in session and session['authorized'] is True:
         dbm = DataBaseManager()

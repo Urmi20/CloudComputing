@@ -1,11 +1,13 @@
 from flask import render_template, request, redirect, url_for, session
-from app import webapp
+from app import userUI
+from management import managerUI
 from app.tools import validate
 from app.tools.dbTools import DataBaseManager
 from app.tools.hashTools import Hash
 
 
-@webapp.route('/newuser')
+@userUI.route('/newuser')
+@managerUI.route('/newuser')
 def create_user_landing():
     if 'authorized' in session and session['authorized'] is True:
         return redirect(url_for("render_gallery"))
@@ -14,7 +16,8 @@ def create_user_landing():
                            email=None, password=None, password_conf=None)
 
 
-@webapp.route('/newuser/create', methods=['POST'])
+@userUI.route('/newuser/create', methods=['POST'])
+@managerUI.route('/newuser/create', methods=['POST'])
 def create_user():
     if 'authorized' in session and session['authorized'] is True:
         return redirect(url_for("render_gallery"))

@@ -1,7 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
 	<ul class="header">
+		{% if type == 'user' %}
 		<li><h1>IK</h1></li>
+		{% endif %}
+
+		{% if type == 'manager' %}
+		<li><h3 style="color: white;">Welcome Managers</h3></li>
+		{% endif %}
 	</ul>
 
 	<form method="post" action="authenticate_user"> <!-- Redirected to index.py-->  <!-- add action path-->
@@ -14,15 +20,19 @@
 			<input type="password" name="password"
 				   placeholder="Password" class="textbox"/><br/><br/>
 
-			{% if error== True %}
+			{% if error == True %}
 				Wrong Username or password<br/><br>
 			{% endif %}
 
+			{% if type == 'user' %}
 			<a href="{{url_for('forgotpwd')}}" style="color:black;">Forgot your password?</a>
+			{% endif %}
 			<input type="submit" class="button" value="Sign in"/><br/><br/>
 
+			{% if type == 'user' %}
 			<label>New User?</label>
 			<a href="{{url_for('create_user_landing')}}" style="color:black;"><b>Sign Up Now</b></a>
+			{% endif %}
 
 		</div>
 	</form>

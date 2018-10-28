@@ -1,12 +1,14 @@
 from flask import render_template, request, session, redirect, url_for
-from app import webapp
+from app import userUI
+from management import managerUI
 from app.tools.email import Email
 from app.tools.dbTools import DataBaseManager
 from app.tools import validate
 from app.tools.hashTools import Hash
 
 
-@webapp.route("/forgotpwd")
+@userUI.route("/forgotpwd")
+@managerUI.route("/forgotpwd")
 def forgotpwd():
     if 'authorized' in session and session['authorized'] is True:
         return redirect(url_for("welcome"))
@@ -15,7 +17,8 @@ def forgotpwd():
         return render_template("forgotpwd.html")
 
 
-@webapp.route("/recovery_submit", methods=["POST"])
+@userUI.route("/recovery_submit", methods=["POST"])
+@managerUI.route("/recovery_submit", methods=["POST"])
 def recovery_submit():
     recipient = request.form.get("email")
     dbm = DataBaseManager()
@@ -37,7 +40,8 @@ def recovery_submit():
         return render_template("forgotpwd.html", error_value=email_not_reg)
 
 
-@webapp.route("/recovery_submit/<token>")
+@userUI.route("/recovery_submit/<token>")
+@managerUI.route("/recovery_submit/<token>")
 def reset_token(token):
     if 'authorized' in session and session['authorized'] is True:
         return redirect(url_for("welcome"))
@@ -47,7 +51,8 @@ def reset_token(token):
     return render_template("NewPwd.html", session=False, token=token)
 
 
-@webapp.route("/recovery_submit/<token>/change_pwd", methods=["POST"])
+@userUI.route("/recovery_submit/<token>/change_pwd", methods=["POST"])
+@managerUI.route("/recovery_submit/<token>/change_pwd", methods=["POST"])
 def change_pwd(token):
     dbm = DataBaseManager()
     user_email = dbm.verify_token(token)

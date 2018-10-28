@@ -1,5 +1,5 @@
 from flask import render_template, request, session, redirect, url_for, Response
-from app import webapp
+from app import userUI
 from app.tools.fileTools import FileManager
 from app.tools.imageTools import ImageTransform
 from app.tools.hashTools import Hash
@@ -7,7 +7,7 @@ from app.tools.dbTools import DataBaseManager
 from app.tools import validate
 
 
-@webapp.route('/photo_upload')
+@userUI.route('/photo_upload')
 def photo_upload_landing():
     if 'authorized' in session and session['authorized'] is True:
         return render_template("uploadphoto.html")
@@ -15,7 +15,7 @@ def photo_upload_landing():
         return redirect(url_for('index'))
 
 
-@webapp.route('/photo_upload', methods=['POST'])
+@userUI.route('/photo_upload', methods=['POST'])
 def photo_upload():
     if 'authorized' in session and session['authorized'] is True:
         input_title = request.form.get("title")
@@ -72,7 +72,7 @@ def extract_photo_from_request():
     return file
 
 
-@webapp.route('/test/FileUpload', methods=['POST'])
+@userUI.route('/test/FileUpload', methods=['POST'])
 def test_upload():
     userID = request.form.get("userID")
     password = request.form.get("password")

@@ -1,7 +1,7 @@
 from flask import g as resources
 import mysql.connector
 import time
-from app import webapp
+from app import userUI
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from os import urandom
 from base64 import b64encode
@@ -124,6 +124,15 @@ class DataBaseManager:
 
         return salt, pw_hash
 
+    def get_user_type(self, username):
+        query = ('select type from user_profile, user '
+                 'where user_profile.id = user.id and user.name = %s')
+        parameters = (username,)
+
+        rows = self._run_query(query, parameters)[1]
+
+        return rows[0][0]
+
     def get_user_thumbs_url(self, username, f_mgr):
         query = ("select id, CONCAT(%s, thumb_file_name) from photo where owner = (select id from user where name = %s)"
                  "order by date_time_added desc")
@@ -164,7 +173,7 @@ class DataBaseManager:
         return user_email
 
 
-@webapp.teardown_appcontext
+@userUI.teardown_appcontext
 def teardown_db(exception):
     db = getattr(resources, "_database", None)
     if db is not None:

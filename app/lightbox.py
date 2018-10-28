@@ -1,10 +1,10 @@
 from flask import render_template, session, url_for, redirect
 from app.tools.dbTools import DataBaseManager
 from app.tools.fileTools import FileManager
-from app import webapp
+from app import userUI
 
 
-@webapp.route('/light_box/<id>', methods=['GET'])
+@userUI.route('/light_box/<id>', methods=['GET'])
 def render_light_box(id):
     if 'authorized' in session and session['authorized'] is True:
         dbm = DataBaseManager()

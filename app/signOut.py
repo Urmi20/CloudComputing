@@ -1,8 +1,8 @@
 from flask import render_template, session
-from app import webapp
+from app import userUI
 
 
-@webapp.route('/sign_out', methods=['GET'])
+@userUI.route('/sign_out', methods=['GET'])
 def sign_out():
     session.clear()
 
