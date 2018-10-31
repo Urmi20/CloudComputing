@@ -9,9 +9,11 @@ def render_light_box(id):
     if 'authorized' in session and session['authorized'] is True:
         dbm = DataBaseManager()
         f_mgr = FileManager()
-        photos = dbm.get_user_full_sizes_url(session['user'], id, f_mgr)
+        photos = dbm.get_user_full_sizes(session['user'], id)
+        f_mgr.download_from_s3(photos)
+        img_urls = f_mgr.get_url_for(photos)
 
         if photos:
-            return render_template('lightbox.html', username=session['user'], photos=photos)
+            return render_template('lightbox.html', username=session['user'], photos=img_urls)
 
     return redirect(url_for('index'))

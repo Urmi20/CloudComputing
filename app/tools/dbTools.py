@@ -133,26 +133,26 @@ class DataBaseManager:
 
         return rows[0][0]
 
-    def get_user_thumbs_url(self, username, f_mgr):
-        query = ("select id, CONCAT(%s, thumb_file_name) from photo where owner = (select id from user where name = %s)"
+    def get_user_thumbs(self, username, f_mgr):
+        query = ("select id, thumb_file_name from photo where owner = (select id from user where name = %s)"
                  "order by date_time_added desc")
-        parameters = (f_mgr.url_for, username)
+        parameters = (username,)
 
         rows = self._run_query(query, parameters)[1]
 
         return rows
 
-    def get_user_full_sizes_url(self, username, img_id, f_mgr):
-        query = ("select title as transformation_type, CONCAT(%s, orig_file_name) "
+    def get_user_full_sizes(self, username, img_id):
+        query = ("select title as transformation_type, orig_file_name "
                  "from photo where id = %s " 
                  "and owner = (select id from user where name = %s) " 
                  "UNION "
-                 "select description, CONCAT(%s, file_name) "
+                 "select description, file_name "
                  "from transformation, photo, user, transformation_type "
                  "where original = %s and transformation.original = photo.id and " 
                  "photo.owner = (select id from user where name = %s) and " 
                  "transformation.trans_type = transformation_type.id")
-        parameters = (f_mgr.url_for, img_id, username, f_mgr.url_for, img_id, username)
+        parameters = (img_id, username, img_id, username)
 
         rows = self._run_query(query, parameters)[1]
 
