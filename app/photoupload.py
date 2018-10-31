@@ -51,7 +51,8 @@ def photo_upload():
 
         if not db_success:
             return render_template("uploadphoto.html",
-                                   up_error="There was an error. Please try again.", title=input_title, hashtags=input_hashtag)
+                                   up_error="There was an error. Please try again.",
+                                   title=input_title, hashtags=input_hashtag)
 
         return redirect(url_for('render_gallery'))
     return redirect(url_for('index'))

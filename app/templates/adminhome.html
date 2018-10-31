@@ -1,43 +1,83 @@
 {% extends "base.html" %}
 {% block content %}
 <ul class="header" id="myHeader">
-    <li><h1 style="color:white;">{{photos[0][0]}}'s lightbox</h1></li>
+    <li><h1 style="color:white;">Under the hood</h1></li>
     <li style="float:right;"><a href="{{url_for('sign_out')}}">Sign out</a></li>
-    <li style="float:right;"><a href="{{url_for('photo_upload_landing')}}">Upload photo</a></li>
-    <li style="float:right;"><a href="{{url_for('render_gallery')}}">{{username}}'s Gallery</a></li>
+</ul>
+<br/>
+
+<ul style="list-style: none; padding-left: 0;">
+    <li style="float:left;">
+        <form method="post" action="add_worker">
+            <input type="submit" value="Add worker"/>
+        </form>
+    </li>
+
+    <li style="float:left;">
+        <form method="post" action="sub_worker">
+            <input type="submit" value="Remove worker"/>
+        </form>
+    </li>
 </ul>
 
-<div class="galleryimage">
-<table style="table-layout:fixed; text-align:center;">
+<br/>
+
+<table>
     <tr>
-    {% for type, photo in photos %}
-        <td align="center" valign="center">
-                {{type}}
-                <img src="{{ url_for('static', filename=photo) }}", width="720">
+        <td>
+            Scale up load:
+            <input type="number" name="uth" value="{{uth if uth!=None}}"
+                       placeholder="%" min="1" max="100" class="textbox"/>
         </td>
-        {% if loop.index%2 == 0 %}
-        </tr>
-        <tr>
-        {% endif %}
-    {% endfor %}</tr>
+        <td>
+            Scale down load:
+            <input type="number" name="dth" value="{{dth if dth!=None}}"
+                       placeholder="%" min="1" max="100" class="textbox"/>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            Expand ratio:
+            <input type="number" name="ex_ratio" value="{{ex_ratio if ex_ratio!=None}}"
+                       placeholder="%" min="1" max="100" class="textbox"/>
+        </td>
+        <td>
+            Shrink ratio:
+            <input type="number" name="s_ratio" value="{{s_ratio if s_ratio!=None}}"
+                       placeholder="%" min="1" max="100" class="textbox"/>
+        </td>
+
+        <td>
+            <form method="post" action="size_scaling">
+                <input type="submit" value="Apply"/>
+            </form>
+        </td>
+    </tr>
+
 </table>
+
+<br/>
+
+<div class="galleryimage">
+    <table style="width:100%">
+      <tr>
+        <th width="245px">Instance ID</th>
+        <th>CPU Load (%)</th>
+      </tr>
+      {% for instance, load in cpu_metrics %}
+      <tr>
+        <td width="200px">{{ instance }}</td>
+        <td>{{ load }}</td>
+      </tr>
+      {% endfor %}
+    </table>
 </div>
 
-<script>
-        window.onscroll=function(){myFunction()};
+<br/>
 
-        var header=document.getElementById("myHeader");
-        var sticky=header.offsetTop;
-
-        function myFunction(){
-            if(window.pageYOffset > sticky){
-                header.classList.add("sticky");
-            }
-            else{
-                header.classList.remove("sticky");
-            }
-        }
-
-</script>
+<form method="post" action="delete_all">
+    <input type="submit" value="Delete all data"/>
+</form>
 
 {% endblock %}

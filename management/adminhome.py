@@ -13,11 +13,12 @@ def admin_main_landing():
         metric_name = 'CPUUtilization'
         namespace = 'AWS/EC2'
         statistic = 'Average'
-        cpu_avg = []
+        cpu_metrics=[]
+
 
         for instance in instances:
             cpus = client.get_metric_statistics(Period=1*60,
-                                                StartTime=datetime.utcnow()-timedelta(seconds=5*60),
+                                                StartTime=datetime.utcnow()-timedelta(seconds=1*60),
                                                 EndTime=datetime.utcnow()-timedelta(seconds=0*60),
                                                 MetricName=metric_name,
                                                 Namespace=namespace,
@@ -25,12 +26,20 @@ def admin_main_landing():
                                                 Statistics=[statistic],
                                                 Dimensions=[{'Name': 'InstanceId', 'Value': instance.id}])
 
-            cpu_avg.append(0)
+            metric_read = False
             for cpu in cpus['Datapoints']:
+                metric_read = True
                 if 'Average' in cpu:
-                    cpu_avg.pop()
-                    cpu_avg.append(cpu['Average'])
+                    cpu_metrics.append((instance.id, cpu['Average']))
+                else:
+                    # Instance not running
+                    cpu_metrics.append(instance.id, 0)
 
-        return render_template('adminhome', instances=instances, cpu_avg=cpu_avg)
+            if not metric_read:
+                # No metrics found for a given id.
+                # Probably cloud watch failed to return.
+                cpu_metrics.append((instance.id, 0))
+
+        return render_template('adminhome.html', cpu_metrics=cpu_metrics)
 
     return redirect(url_for('index'))
