@@ -12,8 +12,8 @@ class FileManager:
         self.last_saved_full_path = ""
         self.s3_bucket = "instakilo"
 
-        if not os.path.exists(self.directory):
-            os.makedirs(self.directory)
+        # if not os.path.exists(self.directory):
+            # os.makedirs(self.directory)
 
     def allowed_file(self, filename):
         return '.' in filename and \

@@ -126,7 +126,7 @@ class DataBaseManager:
 
     def get_user_type(self, username):
         query = ('select type from user_profile, user '
-                 'where user_profile.id = user.id and user.name = %s')
+                 'where user_profile.id = user.profile and user.name = %s')
         parameters = (username,)
 
         rows = self._run_query(query, parameters)[1]
