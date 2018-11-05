@@ -142,6 +142,16 @@ COMMIT;
 
 
 -- -----------------------------------------------------
+-- Data for table `InstaKilo`.`user`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `InstaKilo`;
+INSERT INTO `InstaKilo`.`user` (`id`, `profile`, `name`, `first_name`, `last_name`, `email`, `pw_salt_hash`) VALUES (1, 2, 'root', 'Mr All', 'Power', 'root@instakilo.ca', '$b4d3f077394d4f748d9fc66d5d4e1d9c$2716add7a66cdc1e723f45122576ef4d7b1935fd89349cd194c1156e3169ac6e664a5376c9df734b4392a5e6d45aec530a1c120b166c8c3f67058c49b830c969');
+
+COMMIT;
+
+
+-- -----------------------------------------------------
 -- Data for table `InstaKilo`.`transformation_type`
 -- -----------------------------------------------------
 START TRANSACTION;
