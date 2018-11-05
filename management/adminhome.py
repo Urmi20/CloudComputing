@@ -15,7 +15,6 @@ def admin_main_landing():
         statistic = 'Average'
         cpu_metrics=[]
 
-
         for instance in instances:
             cpus = client.get_metric_statistics(Period=1*60,
                                                 StartTime=datetime.utcnow()-timedelta(seconds=1*60),

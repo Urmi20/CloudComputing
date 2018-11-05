@@ -37,22 +37,23 @@ class FileManager:
             s3.upload_file(full_local_file_path, self.s3_bucket, filename)
         return True
 
-    def download_from_s3(self, files):
-        bucket = 'instakilo'  # replace with your bucket name
+    def get_s3_url(self, files):
+        bucket = 'instakilo'
 
-        s3 = boto3.resource('s3')
+        s3 = boto3.client('s3')
+        url = []
 
         for entry in files:
             file = entry[1]
-            saved_file = os.path.join(self.directory, file)
-            try:
-                s3.Bucket(bucket).download_file(file, saved_file)
-            except botocore.exceptions.ClientError as e:
-                if e.response['Error']['Code'] == "404":
-                    print("The object does not exist.")
-                else:
-                    raise
-        return True
+            s3_url = s3.generate_presigned_url('get_object',
+                                        Params={
+                                            'Bucket': 'instakilo',
+                                            'Key': file,
+                                        },
+                                        ExpiresIn=3600)
+
+            url.append((entry[0], s3_url))
+        return url
 
     def delete_file_list(self, files):
         for key in files:

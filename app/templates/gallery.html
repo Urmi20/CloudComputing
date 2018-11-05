@@ -15,7 +15,7 @@
     {% for id, photo in photos %}
         <td align="center" valign="center">
             <a href="{{ url_for('render_light_box', id=id) }}">
-                <img src="{{ url_for('static', filename=photo) }}">
+                <img src="{{photo}}">
             </a>
         </td>
         {% if loop.index%4 == 0 %}

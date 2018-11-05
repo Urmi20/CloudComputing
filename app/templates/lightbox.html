@@ -13,7 +13,7 @@
     {% for type, photo in photos %}
         <td align="center" valign="center">
                 {{type}}
-                <img src="{{ url_for('static', filename=photo) }}", width="720">
+                <img src="{{photo}}", width="720">
         </td>
         {% if loop.index%2 == 0 %}
         </tr>

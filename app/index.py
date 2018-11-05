@@ -5,6 +5,8 @@ from os import urandom
 from app.tools.hashTools import Hash
 from app.tools.dbTools import DataBaseManager
 
+import boto3
+
 
 userUI.secret_key = urandom(24)
 managerUI.secret_key = urandom(24)
