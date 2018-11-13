@@ -38,8 +38,6 @@ class FileManager:
         return True
 
     def get_s3_url(self, files):
-        bucket = 'instakilo'
-
         s3 = boto3.client('s3')
         url = []
 
@@ -47,13 +45,18 @@ class FileManager:
             file = entry[1]
             s3_url = s3.generate_presigned_url('get_object',
                                         Params={
-                                            'Bucket': 'instakilo',
+                                            'Bucket': self.s3_bucket,
                                             'Key': file,
                                         },
                                         ExpiresIn=3600)
 
             url.append((entry[0], s3_url))
         return url
+
+    def delete_all_from_s3_bucket(self):
+        s3 = boto3.resource('s3')
+        bucket = s3.Bucket(self.s3_bucket)
+        bucket.objects.all().delete()
 
     def delete_file_list(self, files):
         for key in files:
