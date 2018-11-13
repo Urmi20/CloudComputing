@@ -8,13 +8,13 @@
 
 <ul style="list-style: none; padding-left: 0;">
     <li style="float:left;">
-        <form method="post" action="add_worker">
+        <form method="post" action="add_worker" onsubmit="return confirm('This action will also set the scaling control to MANUAL.');">
             <input type="submit" value="Add worker"/>
         </form>
     </li>
 
     <li style="float:left;">
-        <form method="post" action="sub_worker">
+        <form method="post" action="sub_worker" onsubmit="return confirm('This action will also set the scaling control to MANUAL.');">
             <input type="submit" value="Remove worker"/>
         </form>
     </li>
@@ -22,42 +22,43 @@
 
 <br/>
 
-<table>
-    <tr>
-        <td>
-            Scale up load:
-            <input type="number" name="uth" value="{{uth if uth!=None}}"
-                       placeholder="%" min="1" max="100" class="textbox"/>
-        </td>
-        <td>
-            Scale down load:
-            <input type="number" name="dth" value="{{dth if dth!=None}}"
-                       placeholder="%" min="1" max="100" class="textbox"/>
-        </td>
-    </tr>
+<form method="post" action="size_scaling" onsubmit="return confirm('This action will also set the scaling control to AUTOMATIC.');">
+    <table>
+        <tr>
+            <td>
+                Scale up load:
+                <input type="number" name="uth" value="{{uth if uth!=None}}"
+                           placeholder="%" min="1" max="100" class="textbox"/>
+            </td>
+            <td>
+                Scale down load:
+                <input type="number" name="dth" value="{{dth if dth!=None}}"
+                           placeholder="%" min="1" max="100" class="textbox"/>
+            </td>
+        </tr>
 
-    <tr>
-        <td>
-            Expand ratio:
-            <input type="number" name="ex_ratio" value="{{ex_ratio if ex_ratio!=None}}"
-                       placeholder="%" min="1" max="100" class="textbox"/>
-        </td>
-        <td>
-            Shrink ratio:
-            <input type="number" name="s_ratio" value="{{s_ratio if s_ratio!=None}}"
-                       placeholder="%" min="1" max="100" class="textbox"/>
-        </td>
+        <tr>
+            <td>
+                Expand ratio:
+                <input type="number" name="ex_ratio" value="{{ex_ratio if ex_ratio!=None}}"
+                           placeholder="%" min="1" max="100" class="textbox"/>
+            </td>
+            <td>
+                Shrink ratio:
+                <input type="number" name="s_ratio" value="{{s_ratio if s_ratio!=None}}"
+                           placeholder="%" min="1" max="100" class="textbox"/>
+            </td>
 
-        <td>
-            <form method="post" action="size_scaling">
-                <input type="submit" value="Apply"/>
-            </form>
-        </td>
-    </tr>
-
-</table>
+            <td>
+                    <input type="submit" value="Apply"/>
+            </td>
+        </tr>
+    </table>
+</form>
 
 <br/>
+
+<input type="button" value="Refresh table" onClick="window.location.reload()">
 
 <div class="galleryimage">
     <table style="width:100%">

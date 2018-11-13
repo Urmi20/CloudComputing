@@ -172,6 +172,22 @@ class DataBaseManager:
             return None
         return user_email
 
+    def reset_database(self):
+        query = ("select title as transformation_type, orig_file_name "
+                 "from photo where id = %s "
+                 "and owner = (select id from user where name = %s) "
+                 "UNION "
+                 "select description, file_name "
+                 "from transformation, photo, user, transformation_type "
+                 "where original = %s and transformation.original = photo.id and "
+                 "photo.owner = (select id from user where name = %s) and "
+                 "transformation.trans_type = transformation_type.id")
+        parameters = (img_id, username, img_id, username)
+
+        rows = self._run_query(query, parameters)[1]
+
+        return True
+
 
 @userUI.teardown_appcontext
 def teardown_db(exception):
