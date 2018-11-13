@@ -13,7 +13,7 @@ secret_key = b64encode(key).decode('utf-8')
 class DataBaseManager:
     user = "low_power"
     password = "qweQWE123!@#"
-    host = "127.0.0.1"
+    host = "172.31.94.82"
     database = "InstaKilo"
 
     def __init__(self):
