@@ -46,13 +46,14 @@ def admin_main_landing():
     return redirect(url_for('index'))
 
 
-@managerUI.route('/delete_all')
+@managerUI.route('/delete_all', methods=['POST'])
 def delete_all():
-    f_mgr = FileManager()
-    f_mgr.delete_all_from_s3_bucket()
+    if 'authorized' in session and session['authorized'] is True and 'type' in session and session['type'] == 'admin':
+        f_mgr = FileManager()
+        f_mgr.delete_all_from_s3_bucket()
+        dbm = DataBaseManager()
+        reset_data = dbm.reset_database()
+        return redirect(url_for('admin_main_landing'))
 
-    dbm = DataBaseManager()
-    dbm.reset_database()
-
-    return redirect(url_for('admin_main_landing'))
+    return redirect(url_for('index'))
 

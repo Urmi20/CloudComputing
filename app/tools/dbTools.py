@@ -174,11 +174,11 @@ class DataBaseManager:
 
     def reset_database(self):
         query = ("delete from user where name <> %s")
-        parameters = ("root")
+        parameters = ("root",)
 
         rows = self._run_query(query, parameters)[1]
 
-        return True
+        return rows
 
 
 @userUI.teardown_appcontext
