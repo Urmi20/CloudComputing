@@ -1,6 +1,7 @@
 from flask import render_template, session, redirect, url_for
 import boto3
 from app.tools.fileTools import FileManager
+from app.tools.dbTools import DataBaseManager
 from datetime import datetime, timedelta
 from management import managerUI
 
@@ -49,4 +50,7 @@ def admin_main_landing():
 def delete_all():
     f_mgr = FileManager()
     f_mgr.delete_all_from_s3_bucket()
+
+    dbm = DataBaseManager()
+    dbm.reset_database()
 
