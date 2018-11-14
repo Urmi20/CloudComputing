@@ -126,6 +126,23 @@ CREATE TABLE IF NOT EXISTS `InstaKilo`.`transformation` (
 ENGINE = InnoDB;
 
 
+-- -----------------------------------------------------
+-- Table `InstaKilo`.`scaling_settings`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `InstaKilo`.`scaling_settings` ;
+
+CREATE TABLE IF NOT EXISTS `InstaKilo`.`scaling_settings` (
+  `idmanager` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `scale_up_load` DOUBLE NOT NULL,
+  `scale_down_load` DOUBLE NOT NULL,
+  `expand_ratio` DOUBLE NOT NULL,
+  `shrink_ratio` DOUBLE NOT NULL,
+  `scaling_mode` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idmanager`),
+  UNIQUE INDEX `idmanager_UNIQUE` (`idmanager` ASC) VISIBLE)
+ENGINE = InnoDB;
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
@@ -146,7 +163,7 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `InstaKilo`;
-INSERT INTO `InstaKilo`.`user` (`id`, `profile`, `name`, `first_name`, `last_name`, `email`, `pw_salt_hash`) VALUES (1, 2, 'root', 'Mr All', 'Power', 'root@instakilo.ca', '$b4d3f077394d4f748d9fc66d5d4e1d9c$2716add7a66cdc1e723f45122576ef4d7b1935fd89349cd194c1156e3169ac6e664a5376c9df734b4392a5e6d45aec530a1c120b166c8c3f67058c49b830c969');
+INSERT INTO `InstaKilo`.`user` (`id`, `profile`, `name`, `first_name`, `last_name`, `email`, `pw_salt_hash`) VALUES (DEFAULT, 2, 'root', 'Mr All', 'Power', 'root@instakilo.ca', '$b4d3f077394d4f748d9fc66d5d4e1d9c$2716add7a66cdc1e723f45122576ef4d7b1935fd89349cd194c1156e3169ac6e664a5376c9df734b4392a5e6d45aec530a1c120b166c8c3f67058c49b830c969');
 
 COMMIT;
 
@@ -159,6 +176,16 @@ USE `InstaKilo`;
 INSERT INTO `InstaKilo`.`transformation_type` (`id`, `description`) VALUES (DEFAULT, 'B&W');
 INSERT INTO `InstaKilo`.`transformation_type` (`id`, `description`) VALUES (DEFAULT, 'Warm');
 INSERT INTO `InstaKilo`.`transformation_type` (`id`, `description`) VALUES (DEFAULT, 'High Contrast');
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `InstaKilo`.`scaling_settings`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `InstaKilo`;
+INSERT INTO `InstaKilo`.`scaling_settings` (`idmanager`, `scale_up_load`, `scale_down_load`, `expand_ratio`, `shrink_ratio`, `scaling_mode`) VALUES (DEFAULT, 80, 40, 2, 2, 'auto');
 
 COMMIT;
 
