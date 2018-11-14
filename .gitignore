@@ -1,9 +1,6 @@
 #Mac useless files
 .DS_Store
 
-#uploaded images
-app/static/uploaded_photos/
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 .idea/
