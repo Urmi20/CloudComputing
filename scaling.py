@@ -44,7 +44,7 @@ timestamp = str(last_datapoint['Timestamp'])
 print("{0} load at {1}".format(load, timestamp))
 
 if load < arguments.warn_threshold:
-    exit(0)
+    client.terminate_instances(instance_id)
 elif load > arguments.crit_threshold:
     client = boto3.client('ec2', region_name='us-east-1')
 
