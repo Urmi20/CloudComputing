@@ -13,7 +13,7 @@ secret_key = b64encode(key).decode('utf-8')
 class DataBaseManager:
     user = "low_power"
     password = "qweQWE123!@#"
-    host = "172.31.94.82"
+    host = "127.0.0.1"
     database = "InstaKilo"
 
     def __init__(self):
@@ -173,16 +173,8 @@ class DataBaseManager:
         return user_email
 
     def reset_database(self):
-        query = ("select title as transformation_type, orig_file_name "
-                 "from photo where id = %s "
-                 "and owner = (select id from user where name = %s) "
-                 "UNION "
-                 "select description, file_name "
-                 "from transformation, photo, user, transformation_type "
-                 "where original = %s and transformation.original = photo.id and "
-                 "photo.owner = (select id from user where name = %s) and "
-                 "transformation.trans_type = transformation_type.id")
-        parameters = (img_id, username, img_id, username)
+        query = ("delete from user where name <> %s")
+        parameters = ("root")
 
         rows = self._run_query(query, parameters)[1]
 

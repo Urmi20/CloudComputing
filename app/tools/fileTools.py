@@ -10,7 +10,7 @@ class FileManager:
         self.url_for = "uploaded_photos/"
         self.allowed_extensions = set(['png', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff'])
         self.last_saved_full_path = ""
-        self.s3_bucket = "instakilo"
+        self.s3_bucket = "instakilos3"
 
         # if not os.path.exists(self.directory):
             # os.makedirs(self.directory)

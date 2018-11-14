@@ -54,3 +54,5 @@ def delete_all():
     dbm = DataBaseManager()
     dbm.reset_database()
 
+    return redirect(url_for('admin_main_landing'))
+
