@@ -8,8 +8,8 @@ from app.tools.dbTools import DataBaseManager
 import boto3
 
 
-userUI.secret_key = urandom(24)
-managerUI.secret_key = urandom(24)
+userUI.secret_key = "SecretUserUI##187782####"#urandom(24)
+managerUI.secret_key = "SecretManagerUI##2###"#urandom(24)
 
 
 @userUI.route("/")
