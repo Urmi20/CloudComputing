@@ -3,7 +3,7 @@ import boto3
 from app.tools.fileTools import FileManager
 from app.tools.dbTools import DataBaseManager
 from datetime import datetime, timedelta
-from management import managerUI
+from management import managerUI,scaling
 
 
 @managerUI.route('/admin_main_landing')
@@ -48,11 +48,27 @@ def admin_main_landing():
 
 @managerUI.route('/delete_all')
 def delete_all():
-    f_mgr = FileManager()
-    f_mgr.delete_all_from_s3_bucket()
+    if 'authorized' in session and session['authorized'] is True and 'type' in session and session['type'] == 'admin':
+        f_mgr = FileManager()
+        f_mgr.delete_all_from_s3_bucket()
 
-    dbm = DataBaseManager()
-    dbm.reset_database()
+        dbm = DataBaseManager()
+        dbm.reset_database()
 
-    return redirect(url_for('admin_main_landing'))
+        return redirect(url_for('admin_main_landing'))
+
+@scaling.route('/size_scaling')
+def scalingapp():
+    if 'authorized' in session and session['authorized'] is True and 'type' in session and session['type'] == 'admin':
+        scale_up_load=request.form.get('uth')
+        scale_down_load=request.form.get('dth')
+        expand_ratio=request.form.get('ex_ratio')
+        shrink_ratio=request.form.get('s_ratio')
+        scale_mode='automatic'
+
+        dbm = DataBaseManager()
+        dbm.scaling(scale_up_load,scale_down_load,expand_ratio,shrink_ratio,scale_mode)
+
+        return redirect(url_for('admin_main_landing'))
+
 
