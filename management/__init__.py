@@ -1,7 +1,6 @@
 from flask import Flask
 
 managerUI = Flask(__name__, template_folder='../app/templates', static_folder='../app/static')
-scaling = Flask(__name__, template_folder='../app/templates')
 
 from management import adminhome
 from app import index

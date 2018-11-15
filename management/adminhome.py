@@ -1,9 +1,9 @@
-from flask import render_template, session, redirect, url_for
+from flask import render_template, session, redirect, url_for, request
 import boto3
 from app.tools.fileTools import FileManager
 from app.tools.dbTools import DataBaseManager
 from datetime import datetime, timedelta
-from management import managerUI,scaling
+from management import managerUI
 
 
 @managerUI.route('/admin_main_landing')
@@ -56,8 +56,9 @@ def delete_all():
 
         return redirect(url_for('admin_main_landing'))
 
-@scaling.route('/size_scaling')
-def scalingapp():
+
+@managerUI.route('/size_scaling', methods=['POST'])
+def size_scaling():
     if 'authorized' in session and session['authorized'] is True and 'type' in session and session['type'] == 'admin':
         scale_up_load=request.form.get('uth')
         scale_down_load=request.form.get('dth')
@@ -70,3 +71,41 @@ def scalingapp():
 
         return redirect(url_for('admin_main_landing'))
 
+@managerUI.route('/add_worker', methods=['POST'])
+def add_worker():
+    if 'authorized' in session and session['authorized'] is True and 'type' in session and session['type'] == 'admin':
+        client = boto3.client('ec2', region_name='us-east-1')
+
+        response = client.run_instances(
+            BlockDeviceMappings=[
+                {
+                    'DeviceName': '/dev/xvda',
+                    'VirtualName': 'Banana',
+                    'Ebs': {
+
+                        'DeleteOnTermination': True,
+                        'VolumeSize': 8,
+                        'VolumeType': 'standard'
+                    },
+                },
+            ],
+            ImageId='ami-05ce302e08cc9baa3',
+            InstanceType='t3.small',
+            MaxCount=1,
+            MinCount=1,
+            Monitoring={
+                'Enabled': True
+            },
+            NetworkInterfaces=[
+                {
+                    'Groups': [
+                        'sg-03e9dfa1729c8ae8a',
+                    ],
+                    'SubnetId': 'subnet-bc7df692',
+                    'DeviceIndex': 0
+                }
+            ],
+            KeyName= "Ritam_ECE1779"
+        )
+
+    return True

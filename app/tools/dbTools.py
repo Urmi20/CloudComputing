@@ -103,9 +103,9 @@ class DataBaseManager:
         print(parameters)
         return self._run_query(query, parameters)[0]
 
-    def scaling(self, scale_up_load,scale_down_load,expand_ratio,shrink_ratio,scale_mode):
+    def scaling(self, scale_up_load, scale_down_load, expand_ratio, shrink_ratio, scale_mode):
         query = ('update scaling_settings SET scale_up_load=%s,scale_down_load=%s,expand_ratio=%s,shrink_ratio=%s,scaling_mode=%s WHERE id= 1')
-        parameters = (scale_up_load,scale_down_load,expand_ratio,shrink_ratio,scale_mode)
+        parameters = (scale_up_load, scale_down_load, expand_ratio, shrink_ratio, scale_mode)
 
         return self._run_query(query, parameters)[0]
 
