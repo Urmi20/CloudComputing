@@ -15,12 +15,12 @@ def admin_main_landing():
         metric_name = 'CPUUtilization'
         namespace = 'AWS/EC2'
         statistic = 'Average'
-        cpu_metrics=[]
+        cpu_metrics = []
 
         for instance in instances:
-            cpus = client.get_metric_statistics(Period=1*60,
-                                                StartTime=datetime.utcnow()-timedelta(seconds=1*60),
-                                                EndTime=datetime.utcnow()-timedelta(seconds=0*60),
+            cpus = client.get_metric_statistics(Period=1 * 60,
+                                                StartTime=datetime.utcnow() - timedelta(seconds=1 * 60),
+                                                EndTime=datetime.utcnow() - timedelta(seconds=0 * 60),
                                                 MetricName=metric_name,
                                                 Namespace=namespace,
                                                 Unit='Percent',
@@ -60,16 +60,17 @@ def delete_all():
 @managerUI.route('/size_scaling', methods=['POST'])
 def size_scaling():
     if 'authorized' in session and session['authorized'] is True and 'type' in session and session['type'] == 'admin':
-        scale_up_load=request.form.get('uth')
-        scale_down_load=request.form.get('dth')
-        expand_ratio=request.form.get('ex_ratio')
-        shrink_ratio=request.form.get('s_ratio')
-        scale_mode='automatic'
+        scale_up_load = request.form.get('uth')
+        scale_down_load = request.form.get('dth')
+        expand_ratio = request.form.get('ex_ratio')
+        shrink_ratio = request.form.get('s_ratio')
+        scale_mode = 'automatic'
 
         dbm = DataBaseManager()
-        dbm.scaling(scale_up_load,scale_down_load,expand_ratio,shrink_ratio,scale_mode)
+        dbm.scaling(scale_up_load, scale_down_load, expand_ratio, shrink_ratio, scale_mode)
 
         return redirect(url_for('admin_main_landing'))
+
 
 @managerUI.route('/add_worker', methods=['POST'])
 def add_worker():
@@ -105,7 +106,34 @@ def add_worker():
                     'DeviceIndex': 0
                 }
             ],
-            KeyName= "Ritam_ECE1779"
+            KeyName="Ritam_ECE1779"
         )
 
-    return True
+        print(response)
+        print([user['InstanceId'] for user in response['Instances']])
+
+        client2 = boto3.client('elb')
+
+        response2 = client2.register_instances_with_load_balancer(
+            LoadBalancerName='InstaKilo',
+            Instances=[
+                {
+                    'InstanceId': ''.join([user['InstanceId'] for user in response['Instances']])
+                },
+            ]
+        )
+
+        return redirect(url_for('admin_main_landing'))
+
+
+@managerUI.route('/sub_worker', methods=['POST'])
+def sub_worker():
+    if 'authorized' in session and session['authorized'] is True and 'type' in session and session['type'] == 'admin':
+        client = boto3.client('elb')
+
+        response = client.describe_load_balancers()
+
+        print(response)
+        
+
+        return redirect(url_for('admin_main_landing'))
