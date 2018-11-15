@@ -46,12 +46,11 @@ def admin_main_landing():
     return redirect(url_for('index'))
 
 
-@managerUI.route('/delete_all')
+@managerUI.route('/delete_all', methods=['POST'])
 def delete_all():
     if 'authorized' in session and session['authorized'] is True and 'type' in session and session['type'] == 'admin':
         f_mgr = FileManager()
         f_mgr.delete_all_from_s3_bucket()
-
         dbm = DataBaseManager()
         dbm.reset_database()
 
@@ -70,5 +69,4 @@ def scalingapp():
         dbm.scaling(scale_up_load,scale_down_load,expand_ratio,shrink_ratio,scale_mode)
 
         return redirect(url_for('admin_main_landing'))
-
 
