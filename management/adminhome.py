@@ -133,7 +133,6 @@ def sub_worker():
 
         response = client.describe_load_balancers()
 
-        print(response)
-        
+        print([user['Instances'] for user in response['LoadBalancerDescriptions']])
 
         return redirect(url_for('admin_main_landing'))
