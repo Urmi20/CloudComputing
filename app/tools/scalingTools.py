@@ -104,6 +104,8 @@ class ScalingTool:
             KeyName="Ritam_ECE1779"
         )
 
+        time.sleep(5)
+
         client2 = boto3.client('elb')
 
         response2 = client2.register_instances_with_load_balancer(

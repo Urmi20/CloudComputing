@@ -88,6 +88,10 @@ def size_scaling():
 def add_worker():
     if 'authorized' in session and session['authorized'] is True and 'type' in session and session['type'] == 'admin':
         ScalingTool.spawn_one_instance()
+        dbm = DataBaseManager()
+        uth, dth, ex_ratio, s_ratio, mode = dbm.get_scaling_settings()
+        mode = 'manual'
+        dbm.scaling(str(int(uth)), str(int(dth)), str(int(ex_ratio)), str(int(s_ratio)), mode)
         return redirect(url_for('admin_main_landing'))
 
     return redirect(url_for('index'))
@@ -98,6 +102,10 @@ def add_worker():
 def sub_worker():
     if 'authorized' in session and session['authorized'] is True and 'type' in session and session['type'] == 'admin':
         ScalingTool.terminate_one_instance()
+        dbm = DataBaseManager()
+        uth, dth, ex_ratio, s_ratio, mode = dbm.get_scaling_settings()
+        mode = 'manual'
+        dbm.scaling(str(int(uth)), str(int(dth)), str(int(ex_ratio)), str(int(s_ratio)), mode)
 
         return redirect(url_for('admin_main_landing'))
 

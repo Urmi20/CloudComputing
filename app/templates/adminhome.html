@@ -13,21 +13,36 @@
 
 <ul style="list-style: none; padding-left: 0;">
     <li style="float:left;">
-        <form method="post" action="add_worker" onsubmit="return confirm('This action will also set the scaling control to MANUAL.');">
+        <form method="post" action="add_worker"
+              {% if mode == 'auto' %}
+              onsubmit="return confirm('This action will also set the scaling control to MANUAL.');"
+              {% endif %} >
             <input type="submit" value="Add worker"/>
         </form>
     </li>
 
     <li style="float:left;">
-        <form method="post" action="sub_worker" onsubmit="return confirm('This action will also set the scaling control to MANUAL.');">
-            <input type="submit" value="Remove worker"/>
+        <form method="post" action="sub_worker"
+              {% if mode == 'auto' %}
+              onsubmit="return confirm('This action will also set the scaling control to MANUAL.');"
+              {% endif %} >
+            <input type="submit" value="Remove worker" id="remove_worker"/>
         </form>
     </li>
+
+    {% if length <= 1 %}
+    <script>
+    document.getElementById("remove_worker").disabled = true;
+    </script>
+    {% endif %}
 </ul>
 
 <br/>
 
-<form method="post" action="size_scaling" onsubmit="return confirm('This action will also set the scaling control to AUTOMATIC.');">
+<form method="post" action="size_scaling"
+      {% if mode == 'manual' %}
+      onsubmit="return confirm('This action will also set the scaling control to AUTOMATIC.');"
+      {% endif %}>
     <table>
         <tr>
             <td>

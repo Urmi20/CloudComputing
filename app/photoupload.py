@@ -93,6 +93,9 @@ def test_upload():
     saved_files = ImageTransform.make_transformations(file_manager.last_saved_full_path)
     saved_files["original"] = FileManager.extract_filename(file_manager.last_saved_full_path)
 
+    file_manager.save_to_s3(saved_files)
+    file_manager.delete_file_list(saved_files)
+
     dbm = DataBaseManager()
     db_success = dbm.add_photos(userID, "Auto Uploaded", "#test_image", saved_files)
 
