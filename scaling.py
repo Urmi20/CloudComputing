@@ -2,6 +2,8 @@ import time
 from app.tools.scalingTools import ScalingTool
 from app.tools.dbTools import DataBaseManager
 
+print('Scaling application has started...')
+
 while True:
     time.sleep(10)
     # Get database scaling settings
@@ -23,6 +25,7 @@ while True:
         expected_n_instances = total_running_instances - n_instances_to_terminate
 
         if expected_n_instances <= 1:
+            print('Expected number of instances limited to 1')
             n_instances_to_terminate = total_running_instances - 1
             expected_n_instances = 1
 

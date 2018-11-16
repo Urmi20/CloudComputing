@@ -106,6 +106,7 @@ class ScalingTool:
     @staticmethod
     def spawn_n_instances(n):
         for i in range(n):
+            print('Creating {} instances'.format(n))
             ScalingTool.spawn_one_instance()
 
     @staticmethod
@@ -121,6 +122,7 @@ class ScalingTool:
     @staticmethod
     def terminate_n_instances(n):
         for i in range(n):
+            print('Terminating {} instances'.format(n))
             ScalingTool.terminate_one_instance()
 
     @staticmethod
@@ -150,6 +152,7 @@ class ScalingTool:
 
     @staticmethod
     def wait_for_instances_to_settle(expected_number_of_instances):
+        print('Waiting for instances to settle in load balancer')
         instances_settled = False
         wait_start_time = datetime.datetime.now()
 
