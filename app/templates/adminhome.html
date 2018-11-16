@@ -6,9 +6,13 @@
 </ul>
 <br/>
 
-{% if error%}
-<span style="color:red;">{{ err }}</span><br/>
+{% if error %}
+<br/>
 {% endif %}
+{% for err in error%}
+<span style="color:red;">{{ err }}</span><br/>
+{% endfor %}
+
 
 <ul style="list-style: none; padding-left: 0;">
     <li style="float:left;">
