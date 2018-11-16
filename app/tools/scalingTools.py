@@ -69,7 +69,7 @@ class ScalingTool:
 
 
     @staticmethod
-    def spaw_one_instace():
+    def spawn_one_instance():
         client = boto3.client('ec2', region_name='us-east-1')
 
         response = client.run_instances(
@@ -117,7 +117,8 @@ class ScalingTool:
 
     @staticmethod
     def spawn_n_instances(n):
-        for i in range(n):
+        for i in range(int(n)):
+            print('Creating {} instances'.format(n))
             ScalingTool.spawn_one_instance()
 
     @staticmethod
@@ -126,13 +127,14 @@ class ScalingTool:
         running_instances_total = len(instances)
 
         if running_instances_total > 1:
-            label, selected_instance = instances[3].popitem()
+            label, selected_instance = instances[0].popitem()
             ec2 = boto3.resource('ec2')
             ec2.instances.filter(InstanceIds=[selected_instance]).terminate()
 
     @staticmethod
     def terminate_n_instances(n):
-        for i in range(n):
+        for i in range(int(n)):
+            print('Terminating {} instances'.format(n))
             ScalingTool.terminate_one_instance()
 
     @staticmethod
@@ -155,25 +157,25 @@ class ScalingTool:
             if state == 'InService':
                 n_instances += 1
 
-        print("Hello")
-
-
-        return True
+        return n_instances
 
     @staticmethod
     def wait_for_instances_to_settle(expected_number_of_instances):
+        print('Waiting for instances to settle in load balancer')
         instances_settled = False
-        wait_start_time = datetime.datetime.now()
+        wait_start_time = datetime.now()
 
         while not instances_settled:
             time.sleep(10)
 
             if expected_number_of_instances == ScalingTool.get_number_of_in_service_instances_in_load_balancer():
+                print('Instances settled')
                 instances_settled = True
 
-            elapsed_time = datetime.datetime.now() - wait_start_time
+            elapsed_time = datetime.now() - wait_start_time
 
-            if elapsed_time > datetime.timedelta(minutes=10):
+            if elapsed_time > timedelta(minutes=10):
+                print('Timeout while waiting for instances to settle')
                 instances_settled = True
 
 

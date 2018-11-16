@@ -39,7 +39,7 @@ def size_scaling():
         scale_down_load = request.form.get('dth')
         expand_ratio = request.form.get('ex_ratio')
         shrink_ratio = request.form.get('s_ratio')
-        scale_mode = 'automatic'
+        scale_mode = 'auto'
 
         err_msg=[]
         dbm = DataBaseManager()
@@ -87,7 +87,7 @@ def size_scaling():
 @managerUI.route('/add_worker', methods=['POST'])
 def add_worker():
     if 'authorized' in session and session['authorized'] is True and 'type' in session and session['type'] == 'admin':
-        ScalingTool.spaw_one_instace()
+        ScalingTool.spawn_one_instance()
         return redirect(url_for('admin_main_landing'))
 
     return redirect(url_for('index'))
