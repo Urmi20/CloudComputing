@@ -115,7 +115,7 @@ class ScalingTool:
         running_instances_total = len(instances)
 
         if running_instances_total > 1:
-            label, selected_instance = instances[3].popitem()
+            label, selected_instance = instances[0].popitem()
             ec2 = boto3.resource('ec2')
             ec2.instances.filter(InstanceIds=[selected_instance]).terminate()
 
