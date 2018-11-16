@@ -9,7 +9,10 @@ from app.tools.scalingTools import ScalingTool
 def admin_main_landing():
     if 'authorized' in session and session['authorized'] is True and 'type' in session and session['type'] == 'admin':
         cpu_metrics = ScalingTool.get_instances_load()
-        return render_template('adminhome.html', cpu_metrics=cpu_metrics)
+        dbm = DataBaseManager()
+        uth, dth, ex_ratio, s_ratio, mode = dbm.get_scaling_settings()
+        return render_template('adminhome.html', cpu_metrics=cpu_metrics, ex_ratio=ex_ratio,
+                               s_ratio=s_ratio, uth=uth, dth=dth, mode=mode)
 
     return redirect(url_for('index'))
 
@@ -40,63 +43,41 @@ def size_scaling():
         dbm = DataBaseManager()
         cpu_metrics = ScalingTool.get_instances_load()
 
-        if(scale_up_load=="" or scale_down_load=="" or expand_ratio=="" or shrink_ratio==""):
-
-            msg="Fields cannot be empty"
+        if scale_up_load == "" or scale_down_load == "" or expand_ratio == "" or shrink_ratio == "":
+            msg = "Fields cannot be empty"
             err_msg.append(msg)
+            return render_template('adminhome.html', cpu_metrics=cpu_metrics, err_msg=err_msg,
+                                   uth=scale_up_load, dth=scale_down_load, ex_ratio=expand_ratio, s_ratio=shrink_ratio)
 
-            if int(scale_up_load) < 0:
+        else:
+
+            if float(scale_up_load) < 0:
                 msg='Scale Up Load Should be Greater than 0'
                 err_msg.append(msg)
 
-                if int(scale_down_load) < 0:
-                    msg='Scale Down Load Should be Greater than 0'
-                    err_msg.append(msg)
+            if float(scale_down_load) < 0:
+                msg='Scale Down Load Should be Greater than 0'
+                err_msg.append(msg)
 
-                    if int(scale_up_load) < int(scale_down_load):
-                        msg='Scale Up Load should be Greater than Scale Down Load'
-                        err_msg.append(msg)
+            if float(scale_up_load) < float(scale_down_load):
+                msg='Scale Up Load should be Greater than Scale Down Load'
+                err_msg.append(msg)
 
-                        if int(expand_ratio) < 1:
-                            msg='Expand Ratio should be Greater than 1'
-                            err_msg.append(msg)
+            if float(expand_ratio) <= 1:
+                msg='Expand Ratio should be Greater than 1'
+                err_msg.append(msg)
 
-                            if int(shrink_ratio) < 1:
-                                msg='Shrink Ratio should be Greater than 1'
-                                err_msg.append(msg)
+            if float(shrink_ratio) <= 1:
+                msg='Shrink Ratio should be Greater than 1'
+                err_msg.append(msg)
 
-                                return render_template('adminhome.html', cpu_metrics=cpu_metrics, err_msg=err_msg,
-                                                       uth=scale_up_load, dth=scale_down_load, ex_ratio=expand_ratio, s_ratio=shrink_ratio)
+            if not err_msg:
+                dbm.scaling(scale_up_load, scale_down_load, expand_ratio, shrink_ratio, scale_mode)
 
+                return redirect(url_for('admin_main_landing'))
 
-                            else:
-
-                                return render_template('adminhome.html', cpu_metrics=cpu_metrics, err_msg=err_msg,
-                                                       uth=scale_up_load, dth=scale_down_load, ex_ratio=expand_ratio, s_ratio=shrink_ratio)
-                        else:
-
-                            return render_template('adminhome.html', cpu_metrics=cpu_metrics, err_msg=err_msg,
-                                                   uth=scale_up_load, dth=scale_down_load, ex_ratio=expand_ratio, s_ratio=shrink_ratio)
-
-                    else:
-
-                        return render_template('adminhome.html', cpu_metrics=cpu_metrics, err_msg=err_msg,
-                                               uth=scale_up_load, dth=scale_down_load, ex_ratio=expand_ratio, s_ratio=shrink_ratio)
-                else:
-
-                    return render_template('adminhome.html', cpu_metrics=cpu_metrics, err_msg=err_msg,
-                                           uth=scale_up_load, dth=scale_down_load, ex_ratio=expand_ratio, s_ratio=shrink_ratio)
-            else:
-
-                return render_template('adminhome.html', cpu_metrics=cpu_metrics, err_msg=err_msg,
-                                       uth=scale_up_load, dth=scale_down_load, ex_ratio=expand_ratio, s_ratio=shrink_ratio)
-        else:
-
-            dbm.scaling(scale_up_load, scale_down_load, expand_ratio, shrink_ratio, scale_mode)
-
-            return redirect(url_for('admin_main_landing'))
-
-
+        return render_template('adminhome.html', cpu_metrics=cpu_metrics, error=err_msg,
+                               uth=scale_up_load, dth=scale_down_load, ex_ratio=expand_ratio, s_ratio=shrink_ratio)
 
     return redirect(url_for('index'))
 

@@ -16,16 +16,16 @@ class DataBaseManager:
     host = "127.0.0.1"
     database = "InstaKilo"
 
-    def __init__(self, resources=True):
+    def __init__(self, has_resources=True):
         self.db = None
 
         if resources:
             self.db = getattr(resources, '_database', None)
 
-        if self.db is None and resources:
+        if self.db is None and has_resources:
             self.db = resources._database = self._connect_to_database()
 
-        if self.db is None and not resources:
+        if self.db is None and not has_resources:
             self.db = self._connect_to_database()
 
     def _connect_to_database(self):
@@ -125,8 +125,9 @@ class DataBaseManager:
         down_scale_factor = scaling_settings[0][2]
         instance_start_load = scaling_settings[0][3]
         instance_termination_load = scaling_settings[0][4]
+        mode = scaling_settings[0][5]
 
-        return up_scale_factor, down_scale_factor, instance_start_load, instance_termination_load
+        return up_scale_factor, down_scale_factor, instance_start_load, instance_termination_load, mode
 
     @staticmethod
     def split_salt_hash(salt_hash):

@@ -1,4 +1,5 @@
 import boto3
+import time
 from datetime import datetime, timedelta
 
 
@@ -41,6 +42,19 @@ class ScalingTool:
                 cpu_metrics.append((instance.get('InstanceId'), 0))
 
         return cpu_metrics
+
+    @staticmethod
+    def get_load_balancer_instances_avg_load():
+        # This methos assumes the number of instances is never zero
+        individual_loads = ScalingTool.get_instances_load()
+        total_load = 0
+        instances = 0
+        for load in individual_loads:
+            total_load = total_load + load[1]
+            instances = instances + 1
+
+        return total_load/instances
+
 
     @staticmethod
     def spaw_one_instace():
@@ -90,6 +104,11 @@ class ScalingTool:
         )
 
     @staticmethod
+    def spawn_n_instances(n):
+        for i in range(n):
+            ScalingTool.spawn_one_instance()
+
+    @staticmethod
     def terminate_one_instance():
         instances = ScalingTool.get_instances_in_load_balancer()
         running_instances_total = len(instances)
@@ -100,6 +119,11 @@ class ScalingTool:
             ec2.instances.filter(InstanceIds=[selected_instance]).terminate()
 
     @staticmethod
+    def terminate_n_instances(n):
+        for i in range(n):
+            ScalingTool.terminate_one_instance()
+
+    @staticmethod
     def get_instances_in_load_balancer():
         client = boto3.client('elb')
         response = client.describe_load_balancers()
@@ -107,6 +131,37 @@ class ScalingTool:
         return instances
 
     @staticmethod
-    def get_number_of_instances_in_load_balancer():
-        instances = ScalingTool.get_instances_in_load_balancer()
-        return len(instances)
+    def get_number_of_in_service_instances_in_load_balancer():
+        # instances = ScalingTool.get_instances_in_load_balancer()
+
+        client = boto3.client('elb')
+        response = client.describe_instance_health(LoadBalancerName='InstaKilo').get('InstanceStates')
+        n_instances = 0
+
+        for instance in response:
+            state = instance.get('State')
+            if state == 'InService':
+                n_instances += 1
+
+        print("Hello")
+
+
+        return True
+
+    @staticmethod
+    def wait_for_instances_to_settle(expected_number_of_instances):
+        instances_settled = False
+        wait_start_time = datetime.datetime.now()
+
+        while not instances_settled:
+            time.sleep(10)
+
+            if expected_number_of_instances == ScalingTool.get_number_of_in_service_instances_in_load_balancer():
+                instances_settled = True
+
+            elapsed_time = datetime.datetime.now() - wait_start_time
+
+            if elapsed_time > datetime.timedelta(minutes=10):
+                instances_settled = True
+
+
