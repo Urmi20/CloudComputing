@@ -1,3 +1,4 @@
+import time
 from sys import exit
 from argparse import ArgumentParser
 from datetime import datetime, timedelta
@@ -5,6 +6,7 @@ from operator import itemgetter
 from requests import get
 from boto3.session import Session
 import boto3
+from app.tools.scalingTools import ScalingTool
 
 parser = ArgumentParser(description='EC2 load checker')
 parser.add_argument(
@@ -73,3 +75,14 @@ elif load > arguments.crit_threshold:
     )
 
 
+while True:
+    time.sleep(10)
+    #get database scaling settings
+    #read load balancer average instance loads
+
+    if avg_load < instance_termination_load:
+        #terminate one instance
+
+    if avg_load > instance_start_load:
+        #start new instance
+        
