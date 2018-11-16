@@ -57,7 +57,7 @@ class ScalingTool:
 
 
     @staticmethod
-    def spaw_one_instace():
+    def spawn_one_instace():
         client = boto3.client('ec2', region_name='us-east-1')
 
         response = client.run_instances(
