@@ -31,6 +31,7 @@ while True:
             expected_n_instances = 1
 
         print('Terminating {} instances. Expect {} remaining'.format(n_instances_to_terminate, expected_n_instances))
+        print('total_running_instances: {} ; down_scale_factor {}'.format(total_running_instances, down_scale_factor))
 
         ScalingTool.terminate_n_instances(n_instances_to_terminate)
         ScalingTool.wait_for_instances_to_settle(expected_n_instances)
@@ -40,7 +41,8 @@ while True:
         n_instances_to_start = total_running_instances * up_scale_factor - total_running_instances
         expected_n_instances = total_running_instances + n_instances_to_start
 
-        print('Starting {} instances. Expect {} remaining'.format(n_instances_to_terminate, expected_n_instances))
+        print('Starting {} instances. Expect {} remaining'.format(n_instances_to_start, expected_n_instances))
+        print('total_running_instances: {} ; up_scale_factor {}'.format(total_running_instances, up_scale_factor))
 
         ScalingTool.spawn_n_instances(n_instances_to_start)
         ScalingTool.wait_for_instances_to_settle(expected_n_instances)

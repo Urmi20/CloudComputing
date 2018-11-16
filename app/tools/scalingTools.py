@@ -105,9 +105,9 @@ class ScalingTool:
 
     @staticmethod
     def spawn_n_instances(n):
-        for i in range(n):
+        for i in range(int(n)):
             print('Creating {} instances'.format(n))
-            ScalingTool.spawn_one_instance()
+            #ScalingTool.spawn_one_instance()
 
     @staticmethod
     def terminate_one_instance():
@@ -121,9 +121,9 @@ class ScalingTool:
 
     @staticmethod
     def terminate_n_instances(n):
-        for i in range(n):
+        for i in range(int(n)):
             print('Terminating {} instances'.format(n))
-            ScalingTool.terminate_one_instance()
+            #ScalingTool.terminate_one_instance()
 
     @staticmethod
     def get_instances_in_load_balancer():
