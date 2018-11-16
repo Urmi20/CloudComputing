@@ -63,28 +63,35 @@
 </form>
 
 <br/>
+<br/>
 
-<input type="button" value="Refresh table" onClick="window.location.reload()">
+<h2>CPU Uses -</h2>
+<input type="button" value="Refresh Plots" onClick="window.location.reload()">
+<br/>
+<br/>
 
-<div class="galleryimage">
-    <table style="width:100%">
-      <tr>
-        <th width="245px">Instance ID</th>
-        <th>CPU Load (%)</th>
-      </tr>
-      {% for instance, load in cpu_metrics %}
-      <tr>
-        <td width="200px">{{ instance }}</td>
-        <td>{{ load }}</td>
-      </tr>
-      {% endfor %}
-    </table>
-</div>
+{% for index in range(length) %}
+Instance-ID - {{ instance_list[index] }}
+<div id="cpu_{{ index }}" style="width:300px;height:150px"></div>
+<br/>
 
+    <script>
+      var options = {
+        series: {
+            lines: {show: true},
+            points: {show: true}
+           }
+          };
+
+          $.plot($("#cpu_{{ index }}"), [ {{ cpu_stats[index] }} ], options);
+    </script>
+{% endfor %}
 <br/>
 
 <form method="post" action="delete_all">
     <input type="submit" value="Delete all data"/>
 </form>
+<br/>
+<br/>
 
 {% endblock %}

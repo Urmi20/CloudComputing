@@ -1,6 +1,7 @@
 import boto3
 import time
 from datetime import datetime, timedelta
+from operator import itemgetter
 
 
 class ScalingTool:
@@ -15,33 +16,44 @@ class ScalingTool:
         cpu_metrics = []
 
         instances = ScalingTool.get_instances_in_load_balancer()
-
+        cpu_stats = []
         for instance in instances:
             cpus = client.get_metric_statistics(Period=1 * 60,
-                                                StartTime=datetime.utcnow() - timedelta(seconds=1 * 60),
+                                                StartTime=datetime.utcnow() - timedelta(seconds=60 * 60),
                                                 EndTime=datetime.utcnow() - timedelta(seconds=0 * 60),
                                                 MetricName=metric_name,
                                                 Namespace=namespace,
-                                                Unit='Percent',
+                                                #Unit='Percent',
                                                 Statistics=[statistic],
                                                 Dimensions=[
                                                     {'Name': 'InstanceId', 'Value': instance.get('InstanceId')}])
 
-            metric_read = False
-            for cpu in cpus['Datapoints']:
-                metric_read = True
-                if 'Average' in cpu:
-                    cpu_metrics.append((instance.get('InstanceId'), cpu['Average']))
-                else:
-                    # Instance not running
-                    cpu_metrics.append(instance.get('InstanceId'), 0)
+            # metric_read = False
+            # for cpu in cpus['Datapoints']:
+            #     metric_read = True
+            #     if 'Average' in cpu:
+            #         cpu_metrics.append((instance.get('InstanceId'), cpu['Average']))
+            #     else:
+            #         # Instance not running
+            #         cpu_metrics.append(instance.get('InstanceId'), 0)
+            #
+            # if not metric_read:
+            #     # No metrics found for a given id.
+            #     # Probably cloud watch failed to return.
+            #     cpu_metrics.append((instance.get('InstanceId'), 0))
 
-            if not metric_read:
-                # No metrics found for a given id.
-                # Probably cloud watch failed to return.
-                cpu_metrics.append((instance.get('InstanceId'), 0))
 
-        return cpu_metrics
+            plot_data = []
+            for point in cpus['Datapoints']:
+                hour = point['Timestamp'].hour
+                minute = point['Timestamp'].minute
+                time = hour + minute / 60
+                plot_data.append([time, point['Average']])
+
+            plot_data = sorted(plot_data, key=itemgetter(0))
+            cpu_stats.append(plot_data)
+
+        return cpu_stats, instances
 
     @staticmethod
     def get_load_balancer_instances_avg_load():

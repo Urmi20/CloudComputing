@@ -8,10 +8,12 @@ from app.tools.scalingTools import ScalingTool
 @managerUI.route('/admin_main_landing')
 def admin_main_landing():
     if 'authorized' in session and session['authorized'] is True and 'type' in session and session['type'] == 'admin':
-        cpu_metrics = ScalingTool.get_instances_load()
+        cpu_stats, instances = ScalingTool.get_instances_load()
+        instance_list = [dict['InstanceId'] for dict in instances]
+        length = len(cpu_stats)
         dbm = DataBaseManager()
         uth, dth, ex_ratio, s_ratio, mode = dbm.get_scaling_settings()
-        return render_template('adminhome.html', cpu_metrics=cpu_metrics, ex_ratio=ex_ratio,
+        return render_template('adminhome.html', length=length, instance_list=instance_list, cpu_stats=cpu_stats, ex_ratio=ex_ratio,
                                s_ratio=s_ratio, uth=uth, dth=dth, mode=mode)
 
     return redirect(url_for('index'))
