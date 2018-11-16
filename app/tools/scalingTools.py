@@ -145,7 +145,7 @@ class ScalingTool:
             if state == 'InService':
                 n_instances += 1
 
-        return True
+        return n_instances
 
     @staticmethod
     def wait_for_instances_to_settle(expected_number_of_instances):
