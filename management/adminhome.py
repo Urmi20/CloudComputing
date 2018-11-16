@@ -37,7 +37,7 @@ def size_scaling():
         scale_down_load = request.form.get('dth')
         expand_ratio = request.form.get('ex_ratio')
         shrink_ratio = request.form.get('s_ratio')
-        scale_mode = 'automatic'
+        scale_mode = 'auto'
 
         err_msg=[]
         dbm = DataBaseManager()

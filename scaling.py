@@ -10,7 +10,7 @@ while True:
     dbm = DataBaseManager(False)
     up_scale_factor, down_scale_factor, instance_start_load, instance_termination_load, mode = dbm.get_scaling_settings()
 
-    if mode != 'automatic':
+    if mode != 'auto':
         continue
 
     # Get number of instances in service on load balancer
