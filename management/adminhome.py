@@ -85,7 +85,7 @@ def size_scaling():
 @managerUI.route('/add_worker', methods=['POST'])
 def add_worker():
     if 'authorized' in session and session['authorized'] is True and 'type' in session and session['type'] == 'admin':
-        ScalingTool.spawn_one_instace()
+        ScalingTool.spawn_one_instance()
         return redirect(url_for('admin_main_landing'))
 
     return redirect(url_for('index'))
