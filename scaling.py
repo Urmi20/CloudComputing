@@ -18,6 +18,7 @@ while True:
 
     # Read load balancer average instance loads
     avg_load = ScalingTool.get_load_balancer_instances_avg_load()
+    print('Avg. CPU load = {}'.format(avg_load))
 
     # Should instances be terminated?
     if avg_load < instance_termination_load:
