@@ -26,11 +26,25 @@
     <table>
         <tr>
             <td>
+                {% if error %}
+                <br/>
+                {% endif %}
+                {% for err in error%}
+                <span style="color:red;">{{ err }}</span><br/>
+                {% endfor %}
+
                 Scale up load:
                 <input type="number" name="uth" value="{{uth if uth!=None}}"
                            placeholder="%" min="1" max="100" class="textbox"/>
             </td>
             <td>
+                {% if error %}
+                <br/>
+                {% endif %}
+                {% for err in error%}
+                <span style="color:red;">{{ err }}</span><br/>
+                {% endfor %}
+
                 Scale down load:
                 <input type="number" name="dth" value="{{dth if dth!=None}}"
                            placeholder="%" min="1" max="100" class="textbox"/>
@@ -39,11 +53,25 @@
 
         <tr>
             <td>
+                {% if error %}
+                <br/>
+                {% endif %}
+                {% for err in error%}
+                <span style="color:red;">{{ err }}</span><br/>
+                {% endfor %}
+
                 Expand ratio:
                 <input type="number" name="ex_ratio" value="{{ex_ratio if ex_ratio!=None}}"
                            placeholder="%" min="1" max="100" class="textbox"/>
             </td>
             <td>
+                {% if error %}
+                <br/>
+                {% endif %}
+                {% for err in error%}
+                <span style="color:red;">{{ err }}</span><br/>
+                {% endfor %}
+
                 Shrink ratio:
                 <input type="number" name="s_ratio" value="{{s_ratio if s_ratio!=None}}"
                            placeholder="%" min="1" max="100" class="textbox"/>

@@ -36,10 +36,38 @@ def size_scaling():
         shrink_ratio = request.form.get('s_ratio')
         scale_mode = 'automatic'
 
-        dbm = DataBaseManager()
-        dbm.scaling(scale_up_load, scale_down_load, expand_ratio, shrink_ratio, scale_mode)
 
-        return redirect(url_for('admin_main_landing'))
+        if(scale_up_load>0):
+            if(scale_down_load>0):
+                if(scale_up_load>scale_down_load):
+                    if(expand_ratio>1):
+                        if(shrink_ratio>1):
+
+                            dbm = DataBaseManager()
+                            dbm.scaling(scale_up_load, scale_down_load, expand_ratio, shrink_ratio, scale_mode)
+
+                            return redirect(url_for('admin_main_landing'))
+                        else:
+                            msg='Shrink Ratio should be Greater than 1'
+                            return render_template("adminhome.html", error=msg, uth=scale_up_load,
+                                                   dth=scale_down_load, ex_ratio=expand_ratio, s_ratio=shrink_ratio)
+                    else:
+                        msg='Expand Ratio should be Greater than 1'
+                        return render_template("adminhome.html", error=msg, uth=scale_up_load,
+                                               dth=scale_down_load, ex_ratio=expand_ratio, s_ratio=shrink_ratio)
+
+                else:
+                    msg='Scale Up Load should be Greater than Scale Down Load'
+                    return render_template("adminhome.html", error=msg, uth=scale_up_load,
+                                           dth=scale_down_load, ex_ratio=expand_ratio, s_ratio=shrink_ratio)
+            else:
+                msg='Scale Down Load Should be Greater than 0'
+                return render_template("adminhome.html", error=msg, uth=scale_up_load,
+                                       dth=scale_down_load, ex_ratio=expand_ratio, s_ratio=shrink_ratio)
+        else:
+            msg='Scale Up Load Should be Greater than 0'
+            return render_template("adminhome.html", error=msg, uth=scale_up_load,
+                                    dth=scale_down_load, ex_ratio=expand_ratio, s_ratio=shrink_ratio)
 
     return redirect(url_for('index'))
 
