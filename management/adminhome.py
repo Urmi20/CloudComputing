@@ -36,12 +36,11 @@ def size_scaling():
         shrink_ratio = request.form.get('s_ratio')
         scale_mode = 'automatic'
 
-
-        if(scale_up_load>0):
-            if(scale_down_load>0):
-                if(scale_up_load>scale_down_load):
-                    if(expand_ratio>1):
-                        if(shrink_ratio>1):
+        if int(scale_up_load) > 0:
+            if int(scale_down_load) > 0:
+                if int(scale_up_load) > int(scale_down_load):
+                    if int(expand_ratio) > 1:
+                        if int(shrink_ratio) > 1:
 
                             dbm = DataBaseManager()
                             dbm.scaling(scale_up_load, scale_down_load, expand_ratio, shrink_ratio, scale_mode)

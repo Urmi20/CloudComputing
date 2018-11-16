@@ -13,7 +13,7 @@ secret_key = b64encode(key).decode('utf-8')
 class DataBaseManager:
     user = "low_power"
     password = "qweQWE123!@#"
-    host = "172.31.94.82"
+    host = "127.0.0.1"
     database = "InstaKilo"
 
     def __init__(self, resources=True):
@@ -119,7 +119,14 @@ class DataBaseManager:
         query = ('select * from scaling_settings')
         parameters = ()
 
-        return self._run_query(query, parameters)[1]
+        scaling_settings = self._run_query(query, parameters)[1]
+
+        up_scale_factor = scaling_settings[0][1]
+        down_scale_factor = scaling_settings[0][2]
+        instance_start_load = scaling_settings[0][3]
+        instance_termination_load = scaling_settings[0][4]
+
+        return up_scale_factor, down_scale_factor, instance_start_load, instance_termination_load
 
     @staticmethod
     def split_salt_hash(salt_hash):
