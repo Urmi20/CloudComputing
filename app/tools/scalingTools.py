@@ -154,7 +154,7 @@ class ScalingTool:
     def wait_for_instances_to_settle(expected_number_of_instances):
         print('Waiting for instances to settle in load balancer')
         instances_settled = False
-        wait_start_time = datetime.datetime.now()
+        wait_start_time = datetime.now()
 
         while not instances_settled:
             time.sleep(10)
@@ -162,7 +162,7 @@ class ScalingTool:
             if expected_number_of_instances == ScalingTool.get_number_of_in_service_instances_in_load_balancer():
                 instances_settled = True
 
-            elapsed_time = datetime.datetime.now() - wait_start_time
+            elapsed_time = datetime.now() - wait_start_time
 
             if elapsed_time > datetime.timedelta(minutes=10):
                 instances_settled = True
