@@ -16,11 +16,17 @@ class DataBaseManager:
     host = "127.0.0.1"
     database = "InstaKilo"
 
-    def __init__(self):
-        self.db = getattr(resources, '_database', None)
+    def __init__(self, resources=True):
+        self.db = None
 
-        if self.db is None:
+        if resources:
+            self.db = getattr(resources, '_database', None)
+
+        if self.db is None and resources:
             self.db = resources._database = self._connect_to_database()
+
+        if self.db is None and not resources:
+            self.db = self._connect_to_database()
 
     def _connect_to_database(self):
         """This method is only supposed to be called from DataBaseManager's constructor"""
@@ -109,6 +115,11 @@ class DataBaseManager:
 
         return self._run_query(query, parameters)[0]
 
+    def get_scaling_settings(self):
+        query = ('select * from scaling_settings')
+        parameters = ()
+
+        return self._run_query(query, parameters)[1]
 
     @staticmethod
     def split_salt_hash(salt_hash):

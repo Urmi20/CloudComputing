@@ -105,3 +105,8 @@ class ScalingTool:
         response = client.describe_load_balancers()
         instances = [user['Instances'] for user in response['LoadBalancerDescriptions']][0]
         return instances
+
+    @staticmethod
+    def get_number_of_instances_in_load_balancer():
+        instances = ScalingTool.get_instances_in_load_balancer()
+        return len(instances)
