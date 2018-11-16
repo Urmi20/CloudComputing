@@ -85,7 +85,7 @@ class ScalingTool:
                     },
                 },
             ],
-            ImageId='ami-05ce302e08cc9baa3',
+            ImageId='ami-0189620e379752a8e',
             InstanceType='t3.small',
             MaxCount=1,
             MinCount=1,
