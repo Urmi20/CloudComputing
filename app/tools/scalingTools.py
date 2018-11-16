@@ -145,9 +145,6 @@ class ScalingTool:
             if state == 'InService':
                 n_instances += 1
 
-        print("Hello")
-
-
         return True
 
     @staticmethod
@@ -160,11 +157,13 @@ class ScalingTool:
             time.sleep(10)
 
             if expected_number_of_instances == ScalingTool.get_number_of_in_service_instances_in_load_balancer():
+                print('Instances settled')
                 instances_settled = True
 
             elapsed_time = datetime.now() - wait_start_time
 
             if elapsed_time > datetime.timedelta(minutes=10):
+                print('Timeout while waiting for instances to settle')
                 instances_settled = True
 
 
