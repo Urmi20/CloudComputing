@@ -119,25 +119,31 @@ class ScalingTool:
 
     @staticmethod
     def spawn_n_instances(n):
+        print('Creating {} instances'.format(n))
         for i in range(int(n)):
-            print('Creating {} instances'.format(n))
             ScalingTool.spawn_one_instance()
 
     @staticmethod
-    def terminate_one_instance():
+    def terminate_one_instance(i=1):
         instances = ScalingTool.get_instances_in_load_balancer()
         running_instances_total = len(instances)
 
-        if running_instances_total > 1:
-            label, selected_instance = instances[0].popitem()
+        if running_instances_total > i:
+            selected_instances = []
+            n = 0
+            while n < i:
+                label, selected_instance = instances[n].popitem()
+                selected_instances.append(selected_instance)
+                n += 1
             ec2 = boto3.resource('ec2')
-            ec2.instances.filter(InstanceIds=[selected_instance]).terminate()
+            ec2.instances.filter(InstanceIds=selected_instances).terminate()
 
     @staticmethod
     def terminate_n_instances(n):
-        for i in range(int(n)):
-            print('Terminating {} instances'.format(n))
-            ScalingTool.terminate_one_instance()
+        print('Terminating {} instances'.format(n))
+        #for i in range(int(n)):
+        ScalingTool.terminate_one_instance(n)
+            #time.sleep(3)
 
     @staticmethod
     def get_instances_in_load_balancer():
