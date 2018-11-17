@@ -1,8 +1,19 @@
 import time
 from app.tools.scalingTools import ScalingTool
 from app.tools.dbTools import DataBaseManager
+import logging
+from systemd.journal import JournaldLogHandler
 
-print('Scaling application has started...')
+
+logger = logging.getLogger(__name__)
+
+journald_handler = JournaldLogHandler()
+journald_handler.setFormatter(logging.Formatter(
+    '[%(levelname)s] %(message)s'))
+logger.addHandler(journald_handler)
+logger.setLevel(logging.INFO)
+
+logger.info('Scaling application has started...')
 
 while True:
     time.sleep(10)
