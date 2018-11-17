@@ -6,7 +6,7 @@ from operator import itemgetter
 
 class ScalingTool:
     @staticmethod
-    def get_instances_load():
+    def get_instances_load(window=60):
         client = boto3.client('cloudwatch')
         ec2 = boto3.resource('ec2')
         # instances = ec2.instances.all()
@@ -19,7 +19,7 @@ class ScalingTool:
         cpu_stats = []
         for instance in instances:
             cpus = client.get_metric_statistics(Period=1 * 60,
-                                                StartTime=datetime.utcnow() - timedelta(seconds=60 * 60),
+                                                StartTime=datetime.utcnow() - timedelta(seconds=window * 60),
                                                 EndTime=datetime.utcnow() - timedelta(seconds=0 * 60),
                                                 MetricName=metric_name,
                                                 Namespace=namespace,
@@ -28,19 +28,19 @@ class ScalingTool:
                                                 Dimensions=[
                                                     {'Name': 'InstanceId', 'Value': instance.get('InstanceId')}])
 
-            # metric_read = False
-            # for cpu in cpus['Datapoints']:
-            #     metric_read = True
-            #     if 'Average' in cpu:
-            #         cpu_metrics.append((instance.get('InstanceId'), cpu['Average']))
-            #     else:
-            #         # Instance not running
-            #         cpu_metrics.append(instance.get('InstanceId'), 0)
-            #
-            # if not metric_read:
-            #     # No metrics found for a given id.
-            #     # Probably cloud watch failed to return.
-            #     cpu_metrics.append((instance.get('InstanceId'), 0))
+            metric_read = False
+            for cpu in cpus['Datapoints']:
+                metric_read = True
+                if 'Average' in cpu:
+                    cpu_metrics.append((instance.get('InstanceId'), cpu['Average']))
+                else:
+                    # Instance not running
+                    cpu_metrics.append(instance.get('InstanceId'), 0)
+
+            if not metric_read:
+                # No metrics found for a given id.
+                # Probably cloud watch failed to return.
+                cpu_metrics.append((instance.get('InstanceId'), 0))
 
 
             plot_data = []
@@ -53,12 +53,12 @@ class ScalingTool:
             plot_data = sorted(plot_data, key=itemgetter(0))
             cpu_stats.append(plot_data)
 
-        return cpu_stats, instances
+        return cpu_stats, instances, cpu_metrics
 
     @staticmethod
     def get_load_balancer_instances_avg_load():
         # This methos assumes the number of instances is never zero
-        individual_loads = ScalingTool.get_instances_load()
+        _a, _b, individual_loads = ScalingTool.get_instances_load(1)
         total_load = 0
         instances = 0
         for load in individual_loads:
