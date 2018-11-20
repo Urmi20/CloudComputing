@@ -140,10 +140,9 @@ class ScalingTool:
 
     @staticmethod
     def terminate_n_instances(n):
-        print('Terminating {} instances'.format(n))
-        #for i in range(int(n)):
-        ScalingTool.terminate_one_instance(n)
-            #time.sleep(3)
+        if n != 0:
+            print('Terminating {} instances'.format(n))
+            ScalingTool.terminate_one_instance(n)
 
     @staticmethod
     def get_instances_in_load_balancer():
