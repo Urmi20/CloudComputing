@@ -8,7 +8,7 @@ from app.tools.scalingTools import ScalingTool
 @managerUI.route('/admin_main_landing')
 def admin_main_landing():
     if 'authorized' in session and session['authorized'] is True and 'type' in session and session['type'] == 'admin':
-        cpu_stats, instances = ScalingTool.get_instances_load()
+        cpu_stats, instances, _x = ScalingTool.get_instances_load()
         instance_list = [dict['InstanceId'] for dict in instances]
         length = len(cpu_stats)
         dbm = DataBaseManager()

@@ -13,7 +13,7 @@ secret_key = b64encode(key).decode('utf-8')
 class DataBaseManager:
     user = "low_power"
     password = "qweQWE123!@#"
-    host = "172.31.85.155" # Use 127.0.0.1 if running locally
+    host = "127.0.0.1" # Use 127.0.0.1 if running locally
     database = "InstaKilo"
 
     def __init__(self, has_resources=True):
