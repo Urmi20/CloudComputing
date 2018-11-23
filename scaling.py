@@ -47,3 +47,4 @@ while True:
 
         ScalingTool.spawn_n_instances(n_instances_to_start)
         ScalingTool.wait_for_instances_to_settle(expected_n_instances)
+        time.sleep(180)

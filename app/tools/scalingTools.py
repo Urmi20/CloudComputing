@@ -181,7 +181,7 @@ class ScalingTool:
 
             elapsed_time = datetime.now() - wait_start_time
 
-            if elapsed_time > timedelta(minutes=10):
+            if elapsed_time > timedelta(minutes=2):
                 print('Timeout while waiting for instances to settle')
                 instances_settled = True
 
